@@ -24,6 +24,8 @@ public class AuthFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
+
+        /*
         String method = requestContext.getMethod();
         String path = requestContext.getUriInfo().getPath();
         final String date = requestContext.getHeaderString(HttpHeaders.DATE);
@@ -51,10 +53,8 @@ public class AuthFilter implements ContainerRequestFilter {
         requestContext.setProperty("username", phone_username);
 
 
-        /*
-         * FIXME: DEBUG it!
-         *
-         */
+        // FIXME: DEBUG it!
+         
 
         if (phone_username.equals(4369911602033L)) {
             Log.warning("DEBUG-AUTH: chris detected!");
@@ -85,6 +85,8 @@ public class AuthFilter implements ContainerRequestFilter {
                 .entity("Invalid Request. You are unauthorized!")
                 .build());
         Log.warning("unauthorized request: " + phone_username.toString() + " " + credentials[1]);
+
+        */
 
     }
 
