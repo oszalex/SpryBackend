@@ -8,12 +8,14 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import com.getbro.api.items.User;
-import com.sun.jersey.core.util.Base64;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import org.json.*;
 import java.io.ByteArrayInputStream;
 import java.util.logging.Logger;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
 
 
 @Provider
@@ -150,7 +152,8 @@ public class AuthFilter implements ContainerRequestFilter {
 
     public static String[] decodeAuthHeader(String authHeader) {
         final String withoutBasic = authHeader.replaceFirst("[Bb]asic ", "");
-        final String userColonPass = new String(Base64.decode(withoutBasic));
+        //final String userColonPass = new String(Base64.decode(withoutBasic));
+        final String userColonPass = StringUtils.newStringUtf8(Base64.decodeBase64(withoutBasic));
         final String[] asArray = userColonPass.split(":");
         if (asArray.length == 2) {
             final String username = asArray[0];
