@@ -31,6 +31,8 @@
     </repositories>
     <dependencies>
 
+        <!-- this is for native time parsing -->
+
         <dependency>
             <groupId>com.joestelmach</groupId>
             <artifactId>natty</artifactId>
@@ -95,7 +97,7 @@
         <!-- server end -->
     </dependencies>
     <build>
-        <finalName>v${version}</finalName>
+        <finalName>${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -158,8 +160,8 @@
     </build>
 
     <properties>
-        <jersey.version>2.11</jersey.version>
-        <jetty.version>9.2.1.v20140609</jetty.version>
+        <jersey.version>2.12</jersey.version>
+        <jetty.version>9.2.2.v20140723</jetty.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
