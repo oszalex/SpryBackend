@@ -1,1 +1,1 @@
-web: java -cp target/classes:target/dependency/* com.getbro.api.Main
+web: java -cp target/classes:target/dependency/* com.getbro.api.Heroku
