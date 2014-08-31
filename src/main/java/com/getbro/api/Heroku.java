@@ -10,7 +10,13 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class Heroku {
 
     public static void main(String[] args) throws Exception{
-        final Server server = new Server(80);
+
+        String webPort = System.getenv("PORT");
+        if (webPort == null || webPort.isEmpty()) {
+            webPort = "8080";
+        }
+
+        final Server server = new Server(Integer.valueOf(webPort));
         final WebAppContext root = new WebAppContext();
 
         root.setContextPath("/");
