@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import org.json.*;
 import java.io.ByteArrayInputStream;
+import java.text.ParseException;
 import java.util.logging.Logger;
 
 import org.apache.commons.codec.binary.Base64;
@@ -50,49 +51,51 @@ public class AuthFilter implements ContainerRequestFilter {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("User cannot access the resource.").build());
             Log.warning("Invalid Request #0");
         }
-        String[] credentials = decodeAuthHeader(authHeader);
 
-        //get username
-        Long phone_username = Long.parseLong(credentials[0], 10);
-        Log.info("user " + phone_username.toString() + " successful authenticated!");
-        httpRequest.setAttribute("username", phone_username);
-        //httpRequest.setProperty();
+        try {
+            String[] credentials = decodeAuthHeader(authHeader);
 
-
-
-        // FIXME: DEBUG it!
-         
-
-        if (phone_username.equals(4369911602033L)) {
-            Log.warning("DEBUG-AUTH: chris detected!");
-            return;
-        }
+            //get username
+            Long phone_username = Long.parseLong(credentials[0], 10);
+            Log.info("user " + phone_username.toString() + " successful authenticated!");
+            httpRequest.setAttribute("username", phone_username);
+            //httpRequest.setProperty();
 
 
-        if (requestContext.hasEntity()) {
-            //Aendern des JSON, userID aus header in Json kopieren
-            InputStream is;
-            if ((is = editJson(requestContext.getEntityStream(), credentials[0])) == null) {
-                requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("Invalid Request.").build());
-                Log.warning("Invalid Request #4");
+            // FIXME: DEBUG it!
+            if (phone_username.equals(4369911602033L)) {
+                Log.warning("DEBUG-AUTH: chris detected!");
+                return;
             }
-            requestContext.setEntityStream(is);
-        } else {
+
+
+            if (requestContext.hasEntity()) {
+                //Aendern des JSON, userID aus header in Json kopieren
+                InputStream is;
+                if ((is = editJson(requestContext.getEntityStream(), credentials[0])) == null) {
+                    requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("Invalid Request.").build());
+                    Log.warning("Invalid Request #4");
+                }
+                requestContext.setEntityStream(is);
+            } else {
+                requestContext.abortWith(Response
+                        .status(Response.Status.UNAUTHORIZED)
+                        .entity("Invalid Request.")
+                        .build());
+                Log.warning("Invalid Request #1");
+            }
+
+
+            if (authorize(phone_username, credentials[1], date)) return;
+
             requestContext.abortWith(Response
                     .status(Response.Status.UNAUTHORIZED)
-                    .entity("Invalid Request.")
+                    .entity("Invalid Request. You are unauthorized!")
                     .build());
-            Log.warning("Invalid Request #1");
+            Log.warning("unauthorized request: " + phone_username.toString() + " " + credentials[1]);
+        } catch (ParseException pe){
+            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("please provide valid Auth Header! " + pe.getMessage()).build());
         }
-
-
-        if (authorize(phone_username, credentials[1], date)) return;
-
-        requestContext.abortWith(Response
-                .status(Response.Status.UNAUTHORIZED)
-                .entity("Invalid Request. You are unauthorized!")
-                .build());
-        Log.warning("unauthorized request: " + phone_username.toString() + " " + credentials[1]);
 
     }
 
@@ -154,17 +157,15 @@ public class AuthFilter implements ContainerRequestFilter {
         }
     }
 
-    public static String[] decodeAuthHeader(String authHeader) {
+    public static String[] decodeAuthHeader(String authHeader) throws ParseException{
+        if(!authHeader.matches("^[Bb]asic\\s.*")) throw new ParseException("not able to find Basic-declaration", 0);
+
         final String withoutBasic = authHeader.replaceFirst("[Bb]asic ", "");
-        //final String userColonPass = new String(Base64.decode(withoutBasic));
         final String userColonPass = StringUtils.newStringUtf8(Base64.decodeBase64(withoutBasic));
         final String[] asArray = userColonPass.split(":");
-        if (asArray.length == 2) {
-            final String username = asArray[0];
-            final String signature = asArray[1];
-        } else {
-            return null;
-        }
+
+        if (asArray.length != 2) throw new ParseException("not able to decode Auth Header", 1);
+
         return asArray;
     }
 }
