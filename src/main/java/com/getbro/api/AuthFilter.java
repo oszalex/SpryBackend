@@ -1,6 +1,8 @@
 
 package com.getbro.api;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -24,10 +26,11 @@ public class AuthFilter implements ContainerRequestFilter {
     private static final String charset = "UTF-8";
     private final static Logger Log = Logger.getLogger(AuthFilter.class.getName());
 
+    @Context
+    private HttpServletRequest httpRequest;
+
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-
-        /*
         String method = requestContext.getMethod();
         String path = requestContext.getUriInfo().getPath();
         final String date = requestContext.getHeaderString(HttpHeaders.DATE);
@@ -52,7 +55,9 @@ public class AuthFilter implements ContainerRequestFilter {
         //get username
         Long phone_username = Long.parseLong(credentials[0], 10);
         Log.info("user " + phone_username.toString() + " successful authenticated!");
-        requestContext.setProperty("username", phone_username);
+        httpRequest.setAttribute("username", phone_username);
+        //httpRequest.setProperty();
+
 
 
         // FIXME: DEBUG it!
@@ -62,6 +67,7 @@ public class AuthFilter implements ContainerRequestFilter {
             Log.warning("DEBUG-AUTH: chris detected!");
             return;
         }
+
 
         if (requestContext.hasEntity()) {
             //Aendern des JSON, userID aus header in Json kopieren
@@ -87,8 +93,6 @@ public class AuthFilter implements ContainerRequestFilter {
                 .entity("Invalid Request. You are unauthorized!")
                 .build());
         Log.warning("unauthorized request: " + phone_username.toString() + " " + credentials[1]);
-
-        */
 
     }
 

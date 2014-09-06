@@ -40,9 +40,12 @@ public class EventController extends ApiStorageWrapper {
         List<Event> visibleevents = new LinkedList<Event>();
 
         //FIXME: (Long) request.getAttribute("username"); does not work
-        Long userId = 4369911602033L;
 
-        Log.info("/events called: list all events!");
+        Log.info("test");
+
+        long userId = (Long) request.getAttribute("username"); //4369911602033L;
+
+        Log.info("/events called: list all events for " + userId + "!");
 
         for (Event e : events.values()) {
             if(eventIsVisible(e, userId))
@@ -66,11 +69,11 @@ public class EventController extends ApiStorageWrapper {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{eventID:[a-z0-9]+}")
-    public Event getEvent(@PathParam("eventID") String eventID) {
+    public Event getEvent(@Context HttpServletRequest request, @PathParam("eventID") String eventID) {
         Event e = events.get(Integer.parseInt(eventID) - 1);
 
         //FIXME: (Long) request.getAttribute("username"); does not work
-        Long userId = 4369911602033L;
+        Long userId = (Long) request.getAttribute("username"); //4369911602033L;
 
         if(!eventIsVisible(e, userId))
             throw new NotAuthorizedException("Not allowed to view this event");
