@@ -39,10 +39,6 @@ public class EventController extends ApiStorageWrapper {
     public List<Event> getEvents(@Context HttpServletRequest request) {
         List<Event> visibleevents = new LinkedList<Event>();
 
-        //FIXME: (Long) request.getAttribute("username"); does not work
-
-        Log.info("test");
-
         long userId = (Long) request.getAttribute("username"); //4369911602033L;
 
         Log.info("/events called: list all events for " + userId + "!");
@@ -51,7 +47,6 @@ public class EventController extends ApiStorageWrapper {
             if(eventIsVisible(e, userId))
                 visibleevents.add(e);
         }
-
 
         Collections.sort(visibleevents, new Comparator<Event>() {
             @Override
