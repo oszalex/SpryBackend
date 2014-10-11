@@ -1,10 +1,7 @@
 package com.getbro.api.controller;
 
 import com.getbro.api.ApiStorageWrapper;
-import com.getbro.api.AuthFilter;
-import com.getbro.api.items.Event;
-import com.getbro.api.items.EventInvitation;
-import org.json.JSONObject;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -17,7 +14,7 @@ import java.util.logging.Logger;
 
 @Path("info")
 public class InfoController extends ApiStorageWrapper {
-    private final static Logger Log = Logger.getLogger(AuthFilter.class.getName());
+    private final static Logger Log = Logger.getLogger(InfoController.class.getName());
 
     public InfoController() {
     }

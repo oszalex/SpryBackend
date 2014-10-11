@@ -158,6 +158,7 @@ public class AuthFilter implements ContainerRequestFilter {
     }
 
     public static String[] decodeAuthHeader(String authHeader) throws ParseException{
+        if(authHeader == null) throw new ParseException("no Auth Header!", 0);
         if(!authHeader.matches("^[Bb]asic\\s.*")) throw new ParseException("not able to find Basic-declaration", 0);
 
         final String withoutBasic = authHeader.replaceFirst("[Bb]asic ", "");
