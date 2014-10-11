@@ -67,7 +67,6 @@ public class EventController extends ApiStorageWrapper {
     public Event getEvent(@Context HttpServletRequest request, @PathParam("eventID") String eventID) {
         Event e = events.get(Integer.parseInt(eventID) - 1);
 
-        //FIXME: (Long) request.getAttribute("username"); does not work
         Long userId = (Long) request.getAttribute("username"); //4369911602033L;
 
         if(!eventIsVisible(e, userId))
@@ -87,7 +86,10 @@ public class EventController extends ApiStorageWrapper {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response postJsonEvent(@Context HttpServletRequest request, String json) {
         JSONObject obj = new JSONObject(json);
-        Event e = Event.fromString(obj.getLong("creatorId"), obj.getString("raw"));
+
+        long userId = (Long) request.getAttribute("username"); //4369911602033L;
+
+        Event e = Event.fromString(userId, obj.getString("raw"));
 
 
 
