@@ -1,0 +1,10 @@
+ASE
+===
+
+compile it:
+
+> ./gradlew build
+
+run it:
+
+> java -jar build/libs/ase-0.1.0.jar 
