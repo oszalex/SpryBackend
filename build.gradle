@@ -15,7 +15,7 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'ase'
+    baseName = 'spry'
     version =  '0.1.0'
 }
 
@@ -25,9 +25,13 @@ repositories {
     maven { url "http://repo.spring.io/libs-release" }
 }
 
+
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-security")
     testCompile("junit:junit")
+
+    compile("org.springframework.boot:spring-boot-starter-jetty")
 }
 
 task wrapper(type: Wrapper) {
