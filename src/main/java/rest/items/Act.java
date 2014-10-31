@@ -1,27 +1,31 @@
 package rest.items;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import javax.persistence.*;
+
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by chris on 31/10/14.
  */
+
+@Entity
 public class Act {
     private final static TimeZone tz_gmt = TimeZone.getTimeZone("GMT");
     private final static Pattern location_pattern = Pattern.compile("@(\\w+)");
     private final static Pattern number_pattern = Pattern.compile("\\+(\\d+)");
 
-    private String raw;
-    private long Id;
-    private int duration = 120;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long Id;
+    @OneToMany(targetEntity=Invitation.class, mappedBy="act", fetch=FetchType.EAGER)
+    private List<Invitation> invitations;
+    private String raw;
+    private int duration = 120;
     private Calendar createdAt = new GregorianCalendar(tz_gmt);
     private Calendar datetime = new GregorianCalendar(tz_gmt);
-
     private long creatorId;
     private boolean isPublic;
     private ArrayList<String> tags = new ArrayList<String>();
@@ -105,5 +109,29 @@ public class Act {
 
     public void setCreatorId(long creatorId) {
         this.creatorId = creatorId;
+    }
+
+    public List<String> getTags(){
+        return tags;
+    }
+
+    public List<Invitation> getInvitations() {
+        return invitations;
+    }
+
+    public Calendar getCreatedAt() {
+        return createdAt;
+    }
+
+    public Calendar getDatetime() {
+        return datetime;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public String getLocation() {
+        return location;
     }
 }
