@@ -1,9 +1,8 @@
-package rest.items;
+package rest.domain;
 
 import javax.persistence.*;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**

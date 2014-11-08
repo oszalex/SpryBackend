@@ -1,4 +1,4 @@
-package rest.items;
+package rest.domain;
 
 /**
  * Created by chris on 31/10/14.
