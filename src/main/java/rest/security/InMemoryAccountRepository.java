@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+import rest.exception.UsernameAlreadyInUseException;
 import rest.service.UserRepository;
 import rest.domain.User;
 
@@ -40,5 +41,10 @@ public class InMemoryAccountRepository implements UserRepository {
             }
         }
         return result;
+    }
+
+    @Override
+    public void createAccount(User account) throws UsernameAlreadyInUseException {
+        users.add(account);
     }
 }

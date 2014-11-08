@@ -24,13 +24,13 @@ public class UserDetailsAdapter implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("ROLE_PRE_AUTH_USER");
+    public String getUsername() {
+        return String.valueOf(user.getPhoneNumber());
     }
 
     @Override
-    public String getUsername() {
-        return String.valueOf(user.getPhoneNumber());
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
     @Override

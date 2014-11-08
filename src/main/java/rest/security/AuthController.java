@@ -5,12 +5,17 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rest.domain.User;
+import rest.exception.UsernameAlreadyInUseException;
 import rest.service.UserRepository;
 
 import java.io.UnsupportedEncodingException;
 
 /**
  * Created by chris on 08.11.14.
+ *
+ * TODO:
+ * - limit activate attempts
+ * - only one-time activation?
  */
 
 @RestController
@@ -20,93 +25,51 @@ public class AuthController {
     private UserRepository userRepository;
 
     /**
-     * curl --user 4369911602033:1234 http://localhost:8080/register
+     * curl http://localhost:8080/register/4369911602033
      *
      * TODO: test if user exists
      *
      * @return
      */
-    @RequestMapping("/register")
-    public String registerUser(@RequestHeader("Authorization") String credentials) {
+    @RequestMapping("/register/{phoneNumber}")
+    public String registerUser(@PathVariable(value="phoneNumber") Long phoneNumber) {
 
-        if ((credentials != null) && credentials.startsWith("Basic ")) {
-            byte[] base64Token = new byte[0];
-            try {
-                base64Token = credentials.substring(6).getBytes("UTF-8");
-                String token = new String(Base64.decode(base64Token));
-                String username = "";
-                //String password = "";
+        //create user
+        User u = new User();
+        u.setPhoneNumber(phoneNumber);
 
-                int delim = token.indexOf(":");
-                if (delim != -1) {
-                    username = token.substring(0, delim);
-                    //password = token.substring(delim + 1);
-                }
-
-                //create user
-                User u = new User();
-
-                //FIXME soll dann nicht mehr direkt übergeben werden!
-                return u.getToken();
-
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            return "could not encode header";
+        try {
+            userRepository.createAccount(u);
+        } catch (UsernameAlreadyInUseException e) {
+            e.printStackTrace();
+            return "already registered";
         }
 
-        return "no valid auth header";
+        //FIXME soll dann nicht mehr direkt übergeben werden!
+        return u.getToken();
     }
 
 
 
     /**
-     * curl --user 4369911602033:1234 http://localhost:8080/register
+     * curl http://localhost:8080/activate/4369911602022/1234
      *
-     * @param credentials
      * @return
      */
-    @RequestMapping("/activate/{token}")
-    public String activateUser(@RequestHeader("Authorization") String credentials, @PathVariable(value="token") String token) {
+    @RequestMapping("/activate/{phoneNumber}/{token}")
+    public String activateUser(@PathVariable(value="phoneNumber") Long phoneNumber, @PathVariable(value="token") String token) {
 
-        //TODO: test authheader
+        //find user
+        User u = userRepository.findByPhoneNumber(phoneNumber);
 
-        if ((credentials != null) && credentials.startsWith("Basic ")) {
-            byte[] base64Token = new byte[0];
-            try {
-                base64Token = credentials.substring(6).getBytes("UTF-8");
-                String h_token = new String(Base64.decode(base64Token));
-                String username = "";
+        if(u != null){
+            if (token.equals(u.getToken())) return u.getPassword();
 
-                int delim = h_token.indexOf(":");
-
-                if (delim != -1) {
-                    username = h_token.substring(0, delim);
-
-                    Long phoneNumber = Long.parseLong(username, 10);
-
-                    System.out.print("Number: " + phoneNumber);
-
-                    //find user
-                    User u = userRepository.findByPhoneNumber(phoneNumber);
-
-                    if(u != null){
-                        if (token.equals(u.getToken())) return "pw:" + u.getPassword();
-
-                        return "wrong token";
-                    }
-
-                    return "user not found";
-                }
-
-                return "not valid auth header";
-
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            return "could not encode header";
+            return "wrong token";
         }
 
-        return "no valid auth header provided";
+        return "user not found";
+
+
     }
 }
