@@ -25,6 +25,10 @@ repositories {
     maven { url "http://repo.spring.io/libs-release" }
 }
 
+configurations {
+    providedRuntime
+}
+
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
@@ -34,7 +38,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("com.h2database:h2")
 
-    testCompile("junit:junit")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 
     compile("org.springframework.boot:spring-boot-starter-jetty")
 }

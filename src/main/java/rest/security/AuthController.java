@@ -1,14 +1,11 @@
 package rest.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.codec.Base64;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import rest.domain.User;
-import rest.exception.UsernameAlreadyInUseException;
 import rest.service.UserRepository;
-
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by chris on 08.11.14.
@@ -37,13 +34,7 @@ public class AuthController {
         //create user
         User u = new User();
         u.setPhoneNumber(phoneNumber);
-
-        try {
-            userRepository.createAccount(u);
-        } catch (UsernameAlreadyInUseException e) {
-            e.printStackTrace();
-            return "already registered";
-        }
+        userRepository.save(u);
 
         //FIXME soll dann nicht mehr direkt übergeben werden!
         return u.getToken();
