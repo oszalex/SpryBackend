@@ -1,10 +1,13 @@
 package rest.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import rest.domain.PasswordObject;
 import rest.domain.User;
+import rest.exception.WrongTokenException;
 import rest.service.UserRepository;
 
 /**
@@ -36,6 +39,7 @@ public class AuthController {
         u.setPhoneNumber(phoneNumber);
         userRepository.save(u);
 
+
         //FIXME soll dann nicht mehr direkt übergeben werden!
         return u.getToken();
     }
@@ -48,19 +52,17 @@ public class AuthController {
      * @return
      */
     @RequestMapping("/activate/{phoneNumber}/{token}")
-    public String activateUser(@PathVariable(value="phoneNumber") Long phoneNumber, @PathVariable(value="token") String token) {
+    public PasswordObject activateUser(@PathVariable(value="phoneNumber") Long phoneNumber, @PathVariable(value="token") String token) {
 
         //find user
         User u = userRepository.findByPhoneNumber(phoneNumber);
 
         if(u != null){
-            if (token.equals(u.getToken())) return u.getPassword();
+            if (token.equals(u.getToken())) return new PasswordObject(u.getPassword());
 
-            return "wrong token";
+            throw new WrongTokenException("wrong token");
         }
 
-        return "user not found";
-
-
+        throw new ResourceNotFoundException();
     }
 }
