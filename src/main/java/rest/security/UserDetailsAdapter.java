@@ -28,6 +28,11 @@ public class UserDetailsAdapter implements UserDetails {
         return String.valueOf(user.getPhoneNumber());
     }
 
+    public User getUser()
+    {
+        return user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

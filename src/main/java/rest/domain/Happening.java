@@ -47,6 +47,7 @@ public class Happening {
     private char description[] = new char[140];
 
     // locaton
+    //change fetch type @OneToMany(fetch=FetchType.EAGER)
     @ManyToOne
     private Location location;
 
@@ -59,6 +60,13 @@ public class Happening {
 
     private ArrayList<String> keywords = new ArrayList<String>();
 
+    /*public String getCreator(){
+        return creator.toString();
+    }
+    */
+    public void setCreator(User creator) {
+        this.creator  = creator;
+    }
 
     public int getDuration() {
         return duration;

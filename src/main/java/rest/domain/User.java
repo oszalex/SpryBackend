@@ -49,6 +49,8 @@ public class User {
 
     public User(){
         password = generator.generateKey();
+        //FIXME nur zum testen
+        password  = "123456";
     }
 
 
