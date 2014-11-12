@@ -1,5 +1,6 @@
 package rest.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.crypto.keygen.BytesKeyGenerator;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
@@ -25,27 +26,36 @@ import java.util.List;
  */
 @Entity
 public class User {
+
     @javax.persistence.Id
-    private long phoneNumber;
+    private long userID;
+    @JsonIgnore
+    private Date birth;
+    @JsonIgnore
+    private boolean isBored;
+    @JsonIgnore
     private boolean isFemale;
-    private String password;
+    @JsonIgnore
     private String name;
     // add standard token
-    private String token = "1234";
-    //TODO:privacy? actuallity of location?
 
+    @JsonIgnore
     static StringKeyGenerator generator = KeyGenerators.string();
-
-    //@ManyToOne
-    //private Location location;
-    private Date birth;
-    private boolean isBored;
+    @JsonIgnore
+    private String password;
+    @JsonIgnore
+    private String token = "1234";
 
     @OneToMany
     private List<Happening> created_happenings;
-
     @OneToMany
     private List<Invitation> invited_happenings;
+    //@ManyToOne
+
+    //TODO:privacy? actuallity of location?
+    //private Location location;
+
+
 
     public User(){
         password = generator.generateKey();
@@ -53,16 +63,24 @@ public class User {
         password  = "123456";
     }
 
-
-    public long getPhoneNumber() {
-        return phoneNumber;
+   /* public List<Happening> getcreated_happenings()
+    {
+        return created_happenings;
+    }
+    public List<Invitation> getinvited_happenings()
+    {
+        return invited_happenings;
+    }
+    */
+    public long getUserID() {
+        return userID;
     }
 
     public void setPhoneNumber(long phone_number) {
-        this.phoneNumber = phone_number;
+        this.userID = phone_number;
     }
 
-    public boolean isFemale() {
+    public boolean getIsFemale() {
         return isFemale;
     }
 
@@ -94,7 +112,7 @@ public class User {
         this.birth = birth;
     }
 
-    public boolean isBored() {
+    public boolean getIsBored() {
         return isBored;
     }
 
@@ -109,4 +127,11 @@ public class User {
     public void setToken(String token) {
         this.token = token;
     }
+
+   /* public String toString()
+    {
+        return Long.toString(phoneNumber);
+    }
+
+    */
 }

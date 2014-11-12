@@ -10,9 +10,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     /**
      * Return an {@link User} instance with an email address.
-     * @param phoneNumber an email address as a String
+     * @param userID an email address as a String
      * @return a {@link User instance} or null if not found.
      */
-    User findByPhoneNumber(Long phoneNumber);
+    User findByUserID(Long userID);
 
 }

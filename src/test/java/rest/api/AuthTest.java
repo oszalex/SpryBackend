@@ -1,5 +1,5 @@
 package rest.api;
-
+/*
 import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +22,7 @@ import static junit.framework.TestCase.assertEquals;
  * Created by chris on 09.11.14.
  */
 
-
+/*
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
@@ -71,5 +71,5 @@ public class AuthTest {
 
         Assert.assertEquals(entity.getStatusCode(),HttpStatus.ACCEPTED);
 
-    }*/
-}
+    }
+}*/

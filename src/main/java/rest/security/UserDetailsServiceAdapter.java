@@ -26,7 +26,7 @@ public class UserDetailsServiceAdapter implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User account = userRepository.findByPhoneNumber(Long.valueOf(username));
+        User account = userRepository.findByUserID(Long.valueOf(username));
 
         if (account == null) {
             throw new UsernameNotFoundException(username);

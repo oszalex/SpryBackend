@@ -1,5 +1,7 @@
 package rest.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 import java.util.*;
@@ -22,6 +24,7 @@ public class Happening {
     private long Id;
 
     // invited people
+    @JsonIgnore
     @OneToMany(targetEntity=Invitation.class, mappedBy="happening", fetch=FetchType.EAGER)
     private List<Invitation> invitations;
 
@@ -47,23 +50,20 @@ public class Happening {
     private char description[] = new char[140];
 
     // locaton
-    //change fetch type @OneToMany(fetch=FetchType.EAGER)
     @ManyToOne
     private Location location;
 
     //happening creator
-    @ManyToOne
+    @ManyToOne  //(targetEntity=User.class, fetch=FetchType.EAGER)
     private User creator;
 
     // is this a public
     private boolean isPublic;
 
     private ArrayList<String> keywords = new ArrayList<String>();
-
-    /*public String getCreator(){
-        return creator.toString();
+    public long getID() {
+        return Id;
     }
-    */
     public void setCreator(User creator) {
         this.creator  = creator;
     }
@@ -82,6 +82,9 @@ public class Happening {
 
     public Calendar getCreatedAt() {
         return createdAt;
+    }
+    public User getCreator() {
+        return creator;
     }
 
     public boolean isPublic() {

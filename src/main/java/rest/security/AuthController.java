@@ -34,8 +34,8 @@ public class AuthController {
      */
     @RequestMapping("/register/{phoneNumber}")
     public String registerUser(@PathVariable(value="phoneNumber") Long phoneNumber) {
-
-        if(userRepository.exists(phoneNumber))
+        //TODO: Wenn  User automatisch durch invite angelegt wurde ==> Fehler
+        if(userRepository.exists(phoneNumber) )
             throw new UsernameAlreadyInUseException(phoneNumber.toString() + " already exists");
 
         //create user
@@ -55,10 +55,10 @@ public class AuthController {
      * @return
      */
     @RequestMapping("/activate/{phoneNumber}/{token}")
-    public PasswordObject activateUser(@PathVariable(value="phoneNumber") Long phoneNumber, @PathVariable(value="token") String token) {
+    public PasswordObject activateUser(@PathVariable(value="phoneNumber") Long userID, @PathVariable(value="token") String token) {
 
         //find user
-        User u = userRepository.findByPhoneNumber(phoneNumber);
+        User u = userRepository.findByUserID(userID);
 
         if(u != null){
             if (token.equals(u.getToken())) return new PasswordObject(u.getPassword());

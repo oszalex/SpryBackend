@@ -13,7 +13,10 @@ import rest.exception.EventNotFoundException;
 import rest.exception.UsernameAlreadyInUseException;
 import rest.exception.WrongTokenException;
 import rest.service.HappeningRepository;
+import rest.service.InvitationRepository;
 import rest.service.UserRepository;
+
+import java.util.List;
 
 /**
  * Created by Alex on 12.11.2014.
@@ -25,6 +28,8 @@ public class HappeningController {
     private UserRepository userRepository;
     @Autowired
     private HappeningRepository happeningRepository;
+    @Autowired
+    private InvitationRepository invitationRepository;
 
     @RequestMapping("/happening/{happeningID}")
     public @ResponseBody Happening showHappening(@PathVariable(value="happeningID") Long happeningID) {
@@ -37,11 +42,25 @@ public class HappeningController {
         return happeningRepository.findOne(happeningID);
     }
 
+    @RequestMapping(value="/happening/{happeningID}/invited",method = RequestMethod.GET)
+    public @ResponseBody List<Invitation> showInvites(@PathVariable(value="happeningID") Long happeningID) {
+
+        if(!happeningRepository.exists(happeningID))
+            throw new EventNotFoundException(happeningID.toString() + " Does not exist");
+
+        return happeningRepository.findOne(happeningID).getInvitations();
+    }
+
+    @RequestMapping(value="/happening",method = RequestMethod.GET)
+    public @ResponseBody List<Happening> showHappenings() {
+        return (List)happeningRepository.findAll();
+    }
 
     @RequestMapping(value="/happening",method = RequestMethod.POST)
     public @ResponseBody Happening createEvent(@RequestBody Happening newHappening) {
         //create Happening
-        //newHappening.setCreator((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        newHappening.setCreator(x.getUser());
         happeningRepository.save(newHappening);
         return newHappening;
     }
@@ -51,14 +70,19 @@ public class HappeningController {
                                                  @PathVariable(value="happeningID") Long happeningID,
                                                  @RequestBody Invitation newInvite) {
         //Wenn User nicht vorhanden dann erstellen
-        if(!userRepository.exists(invitedUser)){
-            User u = new User();
+        User u;
+        if (!userRepository.exists(invitedUser)) {
+            u = new User();
             u.setPhoneNumber(invitedUser);
             userRepository.save(u);
+        } else {
+            u = userRepository.findByUserID(invitedUser);
         }
-        //TODO Test etc
+        newInvite.setUser(u);
         newInvite.setHappening(happeningRepository.findOne(happeningID));
-
+        UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        newInvite.setInviter(x.getUser());
+        invitationRepository.save(newInvite);
         return newInvite;
     }
 }

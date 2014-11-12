@@ -25,7 +25,7 @@ public class UserDetailsAdapter implements UserDetails {
 
     @Override
     public String getUsername() {
-        return String.valueOf(user.getPhoneNumber());
+        return String.valueOf(user.getUserID());
     }
 
     public User getUser()
