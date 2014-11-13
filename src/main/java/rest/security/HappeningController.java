@@ -35,12 +35,19 @@ public class HappeningController {
     public @ResponseBody Happening showHappening(@PathVariable(value="happeningID") Long happeningID) {
 
         if(!happeningRepository.exists(happeningID))
-            throw new EventNotFoundException(happeningID.toString() + " Does not exist");
+            throw new EventNotFoundException(happeningID.toString() + " Event does not exist");
 
         //TODO: JSON nach validen parametern absuchen und dem Event hinzufügen
+        //TODO: Überprüfung ob User Event sehen darf
         // z.B: Preis, Dauer, Beschreibung,
         return happeningRepository.findOne(happeningID);
     }
+/*
+     @RequestMapping(value="/happening",method = RequestMethod.GET)
+    public @ResponseBody List<Happening> showHappenings() {
+        return (List)happeningRepository.findAll();
+    }
+    */
 
     @RequestMapping(value="/happening/{happeningID}/invited",method = RequestMethod.GET)
     public @ResponseBody List<Invitation> showInvites(@PathVariable(value="happeningID") Long happeningID) {
@@ -53,7 +60,8 @@ public class HappeningController {
 
     @RequestMapping(value="/happening",method = RequestMethod.GET)
     public @ResponseBody List<Happening> showHappenings() {
-        return (List)happeningRepository.findAll();
+        UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (List)x.getUser().getinvited_happenings();
     }
 
     @RequestMapping(value="/happening",method = RequestMethod.POST)
@@ -80,6 +88,7 @@ public class HappeningController {
         }
         newInvite.setUser(u);
         newInvite.setHappening(happeningRepository.findOne(happeningID));
+        //TODO: Check ob bereits eingeladen? happening existiert? eindeutig?
         UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         newInvite.setInviter(x.getUser());
         invitationRepository.save(newInvite);

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import rest.domain.PasswordObject;
 import rest.domain.User;
@@ -32,7 +33,7 @@ public class AuthController {
      *
      * @return
      */
-    @RequestMapping("/register/{phoneNumber}")
+    @RequestMapping(value="/register/{phoneNumber}",method = RequestMethod.POST)
     public String registerUser(@PathVariable(value="phoneNumber") Long phoneNumber) {
         //TODO: Wenn  User automatisch durch invite angelegt wurde ==> Fehler
         if(userRepository.exists(phoneNumber) )
@@ -54,7 +55,7 @@ public class AuthController {
      *
      * @return
      */
-    @RequestMapping("/activate/{phoneNumber}/{token}")
+    @RequestMapping(value="/activate/{phoneNumber}/{token}",method = RequestMethod.POST)
     public PasswordObject activateUser(@PathVariable(value="phoneNumber") Long userID, @PathVariable(value="token") String token) {
 
         //find user

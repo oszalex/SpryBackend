@@ -1,12 +1,14 @@
 package rest.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javassist.expr.Instanceof;
 import org.springframework.security.crypto.keygen.BytesKeyGenerator;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 
 import javax.crypto.KeyGenerator;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +50,8 @@ public class User {
 
     @OneToMany
     private List<Happening> created_happenings;
-    @OneToMany
+    @JsonIgnore
+    @OneToMany(mappedBy="", fetch=FetchType.EAGER)
     private List<Invitation> invited_happenings;
     //@ManyToOne
 
@@ -62,16 +65,17 @@ public class User {
         //FIXME nur zum testen
         password  = "123456";
     }
-
-   /* public List<Happening> getcreated_happenings()
+/*
+   public List<Happening> getcreated_happenings()
     {
         return created_happenings;
     }
+    */
     public List<Invitation> getinvited_happenings()
     {
         return invited_happenings;
     }
-    */
+
     public long getUserID() {
         return userID;
     }
@@ -128,6 +132,16 @@ public class User {
         this.token = token;
     }
 
+    @Override
+    public boolean equals(Object x)
+    {
+        if(x == null) return false;
+
+        if( x instanceof User) {
+            return true;
+        }
+        return true;
+    }
    /* public String toString()
     {
         return Long.toString(phoneNumber);
