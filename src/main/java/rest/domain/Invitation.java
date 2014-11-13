@@ -1,6 +1,8 @@
 package rest.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Calendar;
 
@@ -24,6 +26,7 @@ public class Invitation {
 
     private Calendar createdAt;
 
+    @JsonIgnore
     @ManyToOne
     private Happening happening;
 

@@ -37,6 +37,8 @@ public class Happening {
     // start time of event
     private Calendar start_time = new GregorianCalendar(tz_gmt);
 
+
+
     // person limit
     private int max_attending = Integer.MAX_VALUE;
 
@@ -49,7 +51,7 @@ public class Happening {
     // only for event agencies
     private char description[] = new char[140];
 
-    // locaton
+    // location
     @ManyToOne
     private Location location;
 
@@ -60,7 +62,16 @@ public class Happening {
     // is this a public
     private boolean isPublic;
 
+
+
     private ArrayList<String> keywords = new ArrayList<String>();
+    public ArrayList<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(ArrayList<String> keywords) {
+        this.keywords = keywords;
+    }
     public long getID() {
         return Id;
     }
@@ -80,6 +91,9 @@ public class Happening {
         return invitations;
     }
 
+    public Calendar getStart_time() {
+        return start_time;
+    }
     public Calendar getCreatedAt() {
         return createdAt;
     }
@@ -87,7 +101,43 @@ public class Happening {
         return creator;
     }
 
-    public boolean isPublic() {
+    public boolean getIsPublic() {
         return isPublic;
+    }
+
+    public int getMax_attending() {
+        return max_attending;
+    }
+
+    public void setMax_attending(int max_attending) {
+        this.max_attending = max_attending;
+    }
+
+    public int getMin_attending() {
+        return min_attending;
+    }
+
+    public void setMin_attending(int min_attending) {
+        this.min_attending = min_attending;
+    }
+
+    public double getPrice_euro() {
+        return price_euro;
+    }
+
+    public void setPrice_euro(double price_euro) {
+        this.price_euro = price_euro;
+    }
+
+    public char[] getDescription() {
+        return description;
+    }
+
+    public void setDescription(char[] description) {
+        this.description = description;
+    }
+
+    public void setIsPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 }
