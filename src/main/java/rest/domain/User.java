@@ -71,6 +71,10 @@ public class User {
         return created_happenings;
     }
     */
+public List<Invitation> getInvited_happenings()
+{
+    return invited_happenings;
+}
     public List<Invitation> getinvited_happenings()
     {
         return invited_happenings;
@@ -136,11 +140,9 @@ public class User {
     public boolean equals(Object x)
     {
         if(x == null) return false;
-
-        if( x instanceof User) {
-            return true;
-        }
-        return true;
+        if(!(x instanceof User)) return false;
+        if(!(((User) x).getUserID() == this.getUserID())) return false;
+        else return true;
     }
    /* public String toString()
     {

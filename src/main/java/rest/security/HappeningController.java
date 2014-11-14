@@ -42,12 +42,12 @@ public class HappeningController {
         // z.B: Preis, Dauer, Beschreibung,
         return happeningRepository.findOne(happeningID);
     }
-/*
+
      @RequestMapping(value="/happening",method = RequestMethod.GET)
     public @ResponseBody List<Happening> showHappenings() {
         return (List)happeningRepository.findAll();
     }
-    */
+
 
     @RequestMapping(value="/happening/{happeningID}/invited",method = RequestMethod.GET)
     public @ResponseBody List<Invitation> showInvites(@PathVariable(value="happeningID") Long happeningID) {
@@ -57,13 +57,13 @@ public class HappeningController {
 
         return happeningRepository.findOne(happeningID).getInvitations();
     }
-
+/*
     @RequestMapping(value="/happening",method = RequestMethod.GET)
-    public @ResponseBody List<Happening> showHappenings() {
+    public @ResponseBody List<Invitation> showHappenings() {
         UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return (List)x.getUser().getinvited_happenings();
     }
-
+*/
     @RequestMapping(value="/happening",method = RequestMethod.POST)
     public @ResponseBody Happening createEvent(@RequestBody Happening newHappening) {
         //create Happening
