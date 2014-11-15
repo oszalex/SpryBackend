@@ -14,9 +14,6 @@ import java.util.regex.Pattern;
 @Entity
 public class Happening {
     private final static TimeZone tz_gmt = TimeZone.getTimeZone("GMT");
-    private final static Pattern location_pattern = Pattern.compile("@(\\w+)");
-    private final static Pattern number_pattern = Pattern.compile("\\+(\\d+)");
-
 
     // unique happening id
     @Id
