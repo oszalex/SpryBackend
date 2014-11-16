@@ -35,16 +35,15 @@ public class AuthController {
      */
     @RequestMapping(value="/register/{phoneNumber}",method = RequestMethod.POST)
     public String registerUser(@PathVariable(value="phoneNumber") Long phoneNumber) {
-        //TODO: Wenn  User automatisch durch invite angelegt wurde ==> Fehler
         if(userRepository.exists(phoneNumber) )
-            throw new UsernameAlreadyInUseException(phoneNumber.toString() + " already exists");
-
+        {
+           return userRepository.findByUserID(phoneNumber).getToken();
+        }
         //create user
         User u = new User();
         u.setPhoneNumber(phoneNumber);
         userRepository.save(u);
-
-        //FIXME soll dann nicht mehr direkt übergeben werden!
+        //TODO: per SMS an die Nummer verschicken
         return u.getToken();
     }
 
@@ -57,16 +56,16 @@ public class AuthController {
      */
     @RequestMapping(value="/activate/{phoneNumber}/{token}",method = RequestMethod.POST)
     public PasswordObject activateUser(@PathVariable(value="phoneNumber") Long userID, @PathVariable(value="token") String token) {
-
-        //find user
         User u = userRepository.findByUserID(userID);
 
         if(u != null){
             if (token.equals(u.getToken())) return new PasswordObject(u.getPassword());
-
-            throw new WrongTokenException("wrong token");
+            else {
+                //TODO: inform APP(errorcode) to reentry number
+                throw new WrongTokenException("wrong token");
+            }
+        }else {
+            throw new ResourceNotFoundException();
         }
-
-        throw new ResourceNotFoundException();
     }
 }

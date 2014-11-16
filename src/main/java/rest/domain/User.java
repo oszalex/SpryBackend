@@ -44,9 +44,9 @@ public class User {
     @JsonIgnore
     static StringKeyGenerator generator = KeyGenerators.string();
     @JsonIgnore
-    private String password;
+    private String password="";
     @JsonIgnore
-    private String token = "1234";
+    private String token;
 
     @OneToMany
     private List<Happening> created_happenings;
@@ -61,16 +61,9 @@ public class User {
 
 
     public User(){
-        password = generator.generateKey();
-        //FIXME nur zum testen
-        password  = "123456";
+
     }
-/*
-   public List<Happening> getcreated_happenings()
-    {
-        return created_happenings;
-    }
-    */
+
 public List<Invitation> getInvited_happenings()
 {
     return invited_happenings;
@@ -97,11 +90,12 @@ public List<Invitation> getInvited_happenings()
     }
 
     public String getPassword() {
+        if(password.equals("")) {
+            password = generator.generateKey();
+            //TODO: nur zum testen
+            password  = "123456";
+        }
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {
@@ -129,6 +123,7 @@ public List<Invitation> getInvited_happenings()
     }
 
     public String getToken() {
+        token = "1234";
         return token;
     }
 
@@ -144,10 +139,4 @@ public List<Invitation> getInvited_happenings()
         if(!(((User) x).getUserID() == this.getUserID())) return false;
         else return true;
     }
-   /* public String toString()
-    {
-        return Long.toString(phoneNumber);
-    }
-
-    */
 }

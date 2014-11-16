@@ -52,6 +52,9 @@ public class Invitation {
 
     public void setUser(User user) {
         this.user = user;
+        if (!user.getinvited_happenings().contains(this)) {
+            user.getinvited_happenings().add(this);
+        }
     }
 
     public User getInviter() {

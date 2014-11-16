@@ -73,10 +73,12 @@ public class HappeningController {
         return newHappening;
     }
 
-    @RequestMapping(value="/happening/{happeningID}/{invitedUser}",method = RequestMethod.POST)
-    public @ResponseBody Invitation invitePerson(@PathVariable(value="invitedUser") Long invitedUser,
+    @RequestMapping(value="/happening/{happeningID}/{invitedUser}",method = RequestMethod.PUT)
+    public @ResponseBody Invitation updateInvitation(@PathVariable(value="invitedUser") Long invitedUser,
                                                  @PathVariable(value="happeningID") Long happeningID,
                                                  @RequestBody Invitation newInvite) {
+        //Wenn Invitation vorhanden dann updaten wenn eingeloggter User gleich invitedUser ist
+        // oder invitation entfernen wenn eingeloggter user creator is und invitationstatus gleich not invited ist
         //Wenn User nicht vorhanden dann erstellen
         User u;
         if (!userRepository.exists(invitedUser)) {
@@ -93,5 +95,38 @@ public class HappeningController {
         newInvite.setInviter(x.getUser());
         invitationRepository.save(newInvite);
         return newInvite;
+    }
+
+    /**
+     *
+     * @param invitedUser   The User who is invited to an event
+     * @param happeningID   The Event the User is invited to
+     * @param newInvite     The Invitationobject that is created
+     *                      //TODO: Nur Status schicken? restliche Info is eh da und wird mit Settern gesetzt
+     * @return
+     */
+    @RequestMapping(value="/happening/{happeningID}/{invitedUser}",method = RequestMethod.POST)
+    public @ResponseBody Invitation invitePerson(@PathVariable(value="invitedUser") Long invitedUser,
+                                                 @PathVariable(value="happeningID") Long happeningID,
+                                                 @RequestBody Invitation newInvite) {
+        if(!happeningRepository.exists((happeningID))){
+            throw new EventNotFoundException(happeningID.toString() + " Does not exist");
+        }
+        UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User inviter = x.getUser();
+        User invited;
+        if (!userRepository.exists(invitedUser)) {
+            invited = new User();
+            invited.setPhoneNumber(invitedUser);
+            userRepository.save(invited);
+        } else {
+            invited = userRepository.findByUserID(invitedUser);
+        }
+            newInvite.setUser(invited);
+            newInvite.setHappening(happeningRepository.findOne(happeningID));
+            newInvite.setInviter(inviter);
+            invitationRepository.save(newInvite);
+            return newInvite;
+
     }
 }
