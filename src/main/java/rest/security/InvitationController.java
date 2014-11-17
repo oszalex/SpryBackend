@@ -39,9 +39,9 @@ public class InvitationController {
     @RequestMapping(value="/invitation/{happeningID}/{invitedUser}",method = RequestMethod.POST)
     public @ResponseBody Invitation invite(@PathVariable(value="invitedUser") Long invitedUser,
                                                  @PathVariable(value="happeningID") Long happeningID,
-                                                 @RequestBody InvitationStatus invitestatus) {
+                                                 @RequestBody Invitation invitestatus) {
         Invitation newInvite = new Invitation();
-        newInvite.setStatus(invitestatus);
+        newInvite.setStatus(invitestatus.getStatus());
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         newInvite.setInviter(x.getUser());
         User invited;
@@ -82,18 +82,18 @@ public class InvitationController {
      * @return
      */
     @RequestMapping(value="/invited/{inviteID}/",method = RequestMethod.PUT)
-    public @ResponseBody Invitation updateInvite(@PathVariable(value="inviteID") Long inviteID,@RequestBody InvitationStatus status ) {
+    public @ResponseBody Invitation updateInvite(@PathVariable(value="inviteID") Long inviteID,@RequestBody Invitation status ) {
 
         if(!invitationRepository.exists(inviteID))
             throw new InvitationNotFoundException(inviteID.toString() + " Does not exist");
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Invitation update = invitationRepository.findOne(inviteID);
         if(x.getUser().equals(update.getinvited_User())){
-            update.setStatus(status);
+            update.setStatus(status.getStatus());
         }
         else
         {
-            //TODO: AuthorityExcecption oder so
+            //TODO: NotAllowedException oder so
         }
         return invitationRepository.findOne(inviteID);
     }
