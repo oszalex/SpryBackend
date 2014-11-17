@@ -88,7 +88,7 @@ public class HappeningController {
         } else {
             u = userRepository.findByUserID(invitedUser);
         }
-        newInvite.setUser(u);
+        newInvite.setinvited_User(u);
         newInvite.setHappening(happeningRepository.findOne(happeningID));
         //TODO: Check ob bereits eingeladen? happening existiert? eindeutig?
         UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -105,6 +105,8 @@ public class HappeningController {
      *                      //TODO: Nur Status schicken? restliche Info is eh da und wird mit Settern gesetzt
      * @return
      */
+
+
     @RequestMapping(value="/happening/{happeningID}/{invitedUser}",method = RequestMethod.POST)
     public @ResponseBody Invitation invitePerson(@PathVariable(value="invitedUser") Long invitedUser,
                                                  @PathVariable(value="happeningID") Long happeningID,
@@ -122,7 +124,7 @@ public class HappeningController {
         } else {
             invited = userRepository.findByUserID(invitedUser);
         }
-            newInvite.setUser(invited);
+            newInvite.setinvited_User(invited);
             newInvite.setHappening(happeningRepository.findOne(happeningID));
             newInvite.setInviter(inviter);
             invitationRepository.save(newInvite);

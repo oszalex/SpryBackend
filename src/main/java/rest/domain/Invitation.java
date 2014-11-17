@@ -17,7 +17,7 @@ public class Invitation {
     private int invitationId;
 
     @ManyToOne
-    private User user;
+    private User invited_User;
 
     @OneToOne
     private User inviter;
@@ -32,28 +32,25 @@ public class Invitation {
 
     public Invitation(){}
 
-    public Invitation(User user, User inviter, InvitationStatus status) {
-        this.user = user;
-        this.inviter = inviter;
-        this.status = status;
+    public Invitation(User invited_User, User inviter, InvitationStatus status, Happening happy) {
+        this.setinvited_User(invited_User);
+        this.setInviter(inviter);
+        this.setStatus(status);
+        this.setHappening(happy);
     }
 
     public int getInvitationId() {
         return invitationId;
     }
 
-    public void setInvitationId(int invitationId) {
-        this.invitationId = invitationId;
+    public User getinvited_User() {
+        return invited_User;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-        if (!user.getinvited_happenings().contains(this)) {
-            user.getinvited_happenings().add(this);
+    public void setinvited_User(User invited_User) {
+        this.invited_User = invited_User;
+        if (!invited_User.getinvited_happenings().contains(this)) {
+            invited_User.getinvited_happenings().add(this);
         }
     }
 
@@ -71,10 +68,6 @@ public class Invitation {
 
     public void setStatus(InvitationStatus status) {
         this.status = status;
-    }
-
-    public Calendar getCreatedAt() {
-        return createdAt;
     }
 
     public void setCreatedAt(Calendar createdAt) {
