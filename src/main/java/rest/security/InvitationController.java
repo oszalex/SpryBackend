@@ -101,4 +101,16 @@ public class InvitationController {
         }
         return invitationRepository.findOne(inviteID);
     }
+
+    /**
+     *  Zeigt Invitations des eingeloggten users
+     *  //TODO:geht nicht
+     * @return
+     */
+    @RequestMapping(value="/invitation/",method = RequestMethod.GET)
+    public @ResponseBody List<Invitation> getInvites() {
+        UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User loggedIn = x.getUser();
+        return loggedIn.getinvited_happenings();
+    }
 }

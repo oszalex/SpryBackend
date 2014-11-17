@@ -49,10 +49,21 @@ public class User {
         invited_happenings = new LinkedList<Invitation>();
         created_happenings = new LinkedList<Happening>();
     }
-    @JsonIgnore
+
     public List<Invitation> getinvited_happenings()
     {
         return invited_happenings;
+    }
+
+    public List<Happening> gethappenings()
+    {
+        //TODO:
+        List happys = new LinkedList();
+        for(Invitation invitation : invited_happenings )
+        {
+            happys.add(invitation.getHappening());
+        }
+        return happys;
     }
     @JsonIgnore
     public long getUserID() {
