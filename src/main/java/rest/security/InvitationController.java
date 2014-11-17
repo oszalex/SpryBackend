@@ -1,5 +1,6 @@
 package rest.security;
 
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import rest.domain.User;
 import rest.exception.EventNotFoundException;
 import rest.exception.InvitationNotFoundException;
 import rest.exception.InviteAlreadyExists;
+import rest.exception.NotAllowedException;
 import rest.service.HappeningRepository;
 import rest.service.InvitationRepository;
 import rest.service.UserRepository;
@@ -60,7 +62,8 @@ public class InvitationController {
         Happening happy = happeningRepository.findOne(happeningID);
         if(!happy.getCreator().equals(x.getUser()))
         {
-            //TODO: Throw not authorized Exception, Check ob User ADMIN ist
+            throw new NotAllowedException("Wrong User?");
+            //TODO:Check ob User ADMIN ist, dann wärs OK
         }
         newInvite.setHappening(happy);
         for(Invitation temp: invited.getinvited_happenings())
@@ -81,7 +84,7 @@ public class InvitationController {
      * @param status    Neuer Invitationstatus als JSONObjekt
      * @return
      */
-    @RequestMapping(value="/invited/{inviteID}/",method = RequestMethod.PUT)
+    @RequestMapping(value="/invitation/{inviteID}/",method = RequestMethod.PUT)
     public @ResponseBody Invitation updateInvite(@PathVariable(value="inviteID") Long inviteID,@RequestBody Invitation status ) {
 
         if(!invitationRepository.exists(inviteID))
@@ -90,10 +93,11 @@ public class InvitationController {
         Invitation update = invitationRepository.findOne(inviteID);
         if(x.getUser().equals(update.getinvited_User())){
             update.setStatus(status.getStatus());
+            invitationRepository.save(update);
         }
         else
         {
-            //TODO: NotAllowedException oder so
+            throw new NotAllowedException("Wrong User?");
         }
         return invitationRepository.findOne(inviteID);
     }

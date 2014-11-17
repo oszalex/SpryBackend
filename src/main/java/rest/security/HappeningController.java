@@ -78,7 +78,7 @@ public class HappeningController {
 
     /**
      * Creates a new Happening
-     * @param newHappening JSONObject that will be autoamtically parsed to a Happening
+     * @param newHappening JSONObject that will be automatically parsed to a Happening
      * @return  The created happening
      */
     @RequestMapping(value="/happening",method = RequestMethod.POST)
