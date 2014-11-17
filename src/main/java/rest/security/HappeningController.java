@@ -125,7 +125,7 @@ public class HappeningController {
             invited = userRepository.findByUserID(invitedUser);
         }
             newInvite.setinvited_User(invited);
-            newInvite.setHappening(happeningRepository.findOne(happeningID));
+
             newInvite.setInviter(inviter);
             invitationRepository.save(newInvite);
             return newInvite;

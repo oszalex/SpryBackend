@@ -8,6 +8,7 @@ import rest.domain.Invitation;
 import rest.domain.InvitationStatus;
 import rest.domain.User;
 import rest.exception.EventNotFoundException;
+import rest.exception.InviteAlreadyExists;
 import rest.service.HappeningRepository;
 import rest.service.InvitationRepository;
 import rest.service.UserRepository;
@@ -27,21 +28,36 @@ public class InvitationController {
     @Autowired
     private InvitationRepository invitationRepository;
 
-    @RequestMapping(value="/invitation/{invitedUser}",method = RequestMethod.POST)
-    public @ResponseBody Invitation invite(@PathVariable("invitedUser") long invitedUser,
-                                           @RequestBody Invitation newInvite) {
+    @RequestMapping(value="/invitation/{happeningID}/{invitedUser}",method = RequestMethod.POST)
+    public @ResponseBody Invitation invite(@PathVariable(value="invitedUser") Long invitedUser,
+                                                 @PathVariable(value="happeningID") Long happeningID,
+                                                 @RequestBody Invitation newInvite) {
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         newInvite.setInviter(x.getUser());
         User invited;
+        long a = invitationRepository.count();
         if (!userRepository.exists(invitedUser)) {
             invited = new User();
             invited.setPhoneNumber(invitedUser);
             userRepository.save(invited);
-        } else {
+        }
+        else {
             invited = userRepository.findByUserID(invitedUser);
+        }
+        if(!happeningRepository.exists(happeningID)){
+            throw new EventNotFoundException("Happening does not exist");
+        }
+        newInvite.setHappening(happeningRepository.findOne(happeningID));
+        for(Invitation temp: invited.getinvited_happenings())
+        {
+            if(temp.getHappening().equals(newInvite.getHappening()))
+            {
+               return temp;
+            }
         }
         newInvite.setinvited_User(invited);
         invitationRepository.save(newInvite);
+
         return newInvite;
     }
 

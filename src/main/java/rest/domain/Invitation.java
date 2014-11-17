@@ -2,6 +2,7 @@ package rest.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import rest.exception.InviteAlreadyExists;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -80,5 +81,8 @@ public class Invitation {
 
     public void setHappening(Happening happening) {
         this.happening = happening;
+      /*  if (!happening.getInvitations().contains(this)) {
+            happening.getInvitations().add(this);
+        }*/
     }
 }

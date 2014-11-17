@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -61,7 +62,8 @@ public class User {
 
 
     public User(){
-
+        invited_happenings = new LinkedList<Invitation>();
+        created_happenings = new LinkedList<Happening>();
     }
 
 public List<Invitation> getInvited_happenings()
