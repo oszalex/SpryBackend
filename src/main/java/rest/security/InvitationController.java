@@ -40,10 +40,10 @@ public class InvitationController {
      */
     @RequestMapping(value="/invitation/{happeningID}/{invitedUser}",method = RequestMethod.POST)
     public @ResponseBody Invitation invite(@PathVariable(value="invitedUser") Long invitedUser,
-                                                 @PathVariable(value="happeningID") Long happeningID,
-                                                 @RequestBody Invitation invitestatus) {
+                                                 @PathVariable(value="happeningID") Long happeningID){
+                                               //  ,@RequestBody Invitation invitestatus) {
         Invitation newInvite = new Invitation();
-        newInvite.setStatus(invitestatus.getStatus());
+        newInvite.setStatus(InvitationStatus.INVITED);
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         newInvite.setInviter(x.getUser());
         User invited;
