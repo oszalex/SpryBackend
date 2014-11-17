@@ -21,7 +21,8 @@ import java.util.List;
  * token wo wird der gespechert
  * lazy/eager loading
  *
- * TODO: check cardinalities
+ * TODO:    check cardinalities, renew password somtime(more than one device etc.
+ *
  */
 
 /**
@@ -40,8 +41,6 @@ public class User {
     private boolean isFemale;
     @JsonIgnore
     private String name;
-    // add standard token
-
     @JsonIgnore
     static StringKeyGenerator generator = KeyGenerators.string();
     @JsonIgnore

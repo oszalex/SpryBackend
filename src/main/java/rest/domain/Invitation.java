@@ -15,11 +15,11 @@ import java.util.Calendar;
 public class Invitation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int invitationId;
-
+    private long invitationId;
+    @JsonIgnore
     @ManyToOne
     private User invited_User;
-
+    @JsonIgnore
     @OneToOne
     private User inviter;
 
@@ -40,7 +40,7 @@ public class Invitation {
         this.setHappening(happy);
     }
 
-    public int getInvitationId() {
+    public long getInvitationId() {
         return invitationId;
     }
 
@@ -58,7 +58,12 @@ public class Invitation {
     public User getInviter() {
         return inviter;
     }
-
+    public long getinviterID() {
+        return inviter.getUserID();
+    }
+    public long getinvited_UserID() {
+        return invited_User.getUserID();
+    }
     public void setInviter(User inviter) {
         this.inviter = inviter;
     }

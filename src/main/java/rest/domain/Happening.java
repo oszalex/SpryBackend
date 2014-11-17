@@ -53,6 +53,7 @@ public class Happening {
     private Location location;
 
     //happening creator
+    @JsonIgnore
     @ManyToOne  //(targetEntity=User.class, fetch=FetchType.EAGER)
     private User creator;
 
@@ -75,7 +76,9 @@ public class Happening {
     public void setCreator(User creator) {
         this.creator  = creator;
     }
-
+    public long getcreatorID() {
+        return creator.getUserID();
+    }
     public int getDuration() {
         return duration;
     }

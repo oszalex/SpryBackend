@@ -39,7 +39,7 @@ public class InvitationController {
         if (!userRepository.exists(invitedUser)) {
             invited = new User();
             invited.setPhoneNumber(invitedUser);
-            userRepository.save(invited);
+            invited = userRepository.save(invited);
         }
         else {
             invited = userRepository.findByUserID(invitedUser);
@@ -57,7 +57,6 @@ public class InvitationController {
         }
         newInvite.setinvited_User(invited);
         invitationRepository.save(newInvite);
-
         return newInvite;
     }
 
