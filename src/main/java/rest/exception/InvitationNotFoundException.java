@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Created by Alex on 12.11.14.
  */
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class EventNotFoundException extends RuntimeException  {
-    public EventNotFoundException(String matchId) {
-        super("Unknown match: " + matchId);
+public class InvitationNotFoundException extends RuntimeException  {
+    public InvitationNotFoundException(String matchId) {
+        super("Unknown Invitation: " + matchId);
     }
 }

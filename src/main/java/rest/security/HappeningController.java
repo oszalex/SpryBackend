@@ -1,5 +1,6 @@
 package rest.security;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.core.Authentication;
@@ -31,24 +32,68 @@ public class HappeningController {
     @Autowired
     private InvitationRepository invitationRepository;
 
-    @RequestMapping("/happening/{happeningID}")
+    /**
+     * Returns the Event with the desired ID(if the Event is public, the User created the event or he is invited)
+     * @param happeningID   Event the User wants to see
+     * @return  The desired Happening
+     */
+    @RequestMapping(value="/happening/{happeningID}",method = RequestMethod.GET)
     public @ResponseBody Happening showHappening(@PathVariable(value="happeningID") Long happeningID) {
 
         if(!happeningRepository.exists(happeningID))
             throw new EventNotFoundException(happeningID.toString() + " Event does not exist");
-
-        //TODO: JSON nach validen parametern absuchen und dem Event hinzufügen
         //TODO: Überprüfung ob User Event sehen darf
-        // z.B: Preis, Dauer, Beschreibung,
         return happeningRepository.findOne(happeningID);
     }
 
+    /**
+     * Updates the desired Event if the User is Creator or an Admin
+     * @param happeningID
+     * @return  the altered Happening
+     */
+    @RequestMapping(value="/happening/{happeningID}",method = RequestMethod.PUT)
+    public @ResponseBody Happening updateHappening(@PathVariable(value="happeningID") Long happeningID, @RequestBody JSONPObject jason) {
+
+        if(!happeningRepository.exists(happeningID))
+            throw new EventNotFoundException(happeningID.toString() + " Event does not exist");
+        Happening happy = happeningRepository.findOne(happeningID);
+        UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!happy.getCreator().equals(x.getUser()))
+        {
+            //TODO: Throw Not Allowed Exception
+        }
+        //TODO: JASON nach validen parametern absuchen und dem Event hinzufügen
+        return happeningRepository.findOne(happeningID);
+    }
+
+    /**
+     * Shows all the Happenings the User is allowed to see(Public, created, invited)
+     * @return JSONobject containing all visible Happenings
+     */
      @RequestMapping(value="/happening",method = RequestMethod.GET)
     public @ResponseBody List<Happening> showHappenings() {
+         //TODO: only visible Events
         return (List)happeningRepository.findAll();
     }
 
+    /**
+     * Creates a new Happening
+     * @param newHappening JSONObject that will be autoamtically parsed to a Happening
+     * @return  The created happening
+     */
+    @RequestMapping(value="/happening",method = RequestMethod.POST)
+    public @ResponseBody Happening createEvent(@RequestBody Happening newHappening) {
+        UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        newHappening.setCreator(x.getUser());
+        newHappening = happeningRepository.save(newHappening);
+        return newHappening;
+    }
 
+    /**
+     * Shows all invitations for a specific happening
+     * @param happeningID
+     * @return
+     */
     @RequestMapping(value="/happening/{happeningID}/invited",method = RequestMethod.GET)
     public @ResponseBody List<Invitation> showInvites(@PathVariable(value="happeningID") Long happeningID) {
 
@@ -56,79 +101,5 @@ public class HappeningController {
             throw new EventNotFoundException(happeningID.toString() + " Does not exist");
 
         return happeningRepository.findOne(happeningID).getInvitations();
-    }
-/*
-    @RequestMapping(value="/happening",method = RequestMethod.GET)
-    public @ResponseBody List<Invitation> showHappenings() {
-        UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return (List)x.getUser().getinvited_happenings();
-    }
-*/
-    @RequestMapping(value="/happening",method = RequestMethod.POST)
-    public @ResponseBody Happening createEvent(@RequestBody Happening newHappening) {
-        //create Happening
-        UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        newHappening.setCreator(x.getUser());
-        happeningRepository.save(newHappening);
-        return newHappening;
-    }
-
-    @RequestMapping(value="/happening/{happeningID}/{invitedUser}",method = RequestMethod.PUT)
-    public @ResponseBody Invitation updateInvitation(@PathVariable(value="invitedUser") Long invitedUser,
-                                                 @PathVariable(value="happeningID") Long happeningID,
-                                                 @RequestBody Invitation newInvite) {
-        //Wenn Invitation vorhanden dann updaten wenn eingeloggter User gleich invitedUser ist
-        // oder invitation entfernen wenn eingeloggter user creator is und invitationstatus gleich not invited ist
-        //Wenn User nicht vorhanden dann erstellen
-        User u;
-        if (!userRepository.exists(invitedUser)) {
-            u = new User();
-            u.setPhoneNumber(invitedUser);
-            userRepository.save(u);
-        } else {
-            u = userRepository.findByUserID(invitedUser);
-        }
-        newInvite.setinvited_User(u);
-        newInvite.setHappening(happeningRepository.findOne(happeningID));
-        //TODO: Check ob bereits eingeladen? happening existiert? eindeutig?
-        UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        newInvite.setInviter(x.getUser());
-        invitationRepository.save(newInvite);
-        return newInvite;
-    }
-
-    /**
-     *
-     * @param invitedUser   The User who is invited to an event
-     * @param happeningID   The Event the User is invited to
-     * @param newInvite     The Invitationobject that is created
-     *                      //TODO: Nur Status schicken? restliche Info is eh da und wird mit Settern gesetzt
-     * @return
-     */
-
-
-    @RequestMapping(value="/happening/{happeningID}/{invitedUser}",method = RequestMethod.POST)
-    public @ResponseBody Invitation invitePerson(@PathVariable(value="invitedUser") Long invitedUser,
-                                                 @PathVariable(value="happeningID") Long happeningID,
-                                                 @RequestBody Invitation newInvite) {
-        if(!happeningRepository.exists((happeningID))){
-            throw new EventNotFoundException(happeningID.toString() + " Does not exist");
-        }
-        UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User inviter = x.getUser();
-        User invited;
-        if (!userRepository.exists(invitedUser)) {
-            invited = new User();
-            invited.setPhoneNumber(invitedUser);
-            userRepository.save(invited);
-        } else {
-            invited = userRepository.findByUserID(invitedUser);
-        }
-            newInvite.setinvited_User(invited);
-
-            newInvite.setInviter(inviter);
-            invitationRepository.save(newInvite);
-            return newInvite;
-
     }
 }

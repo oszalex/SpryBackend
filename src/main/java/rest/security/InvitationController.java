@@ -8,6 +8,7 @@ import rest.domain.Invitation;
 import rest.domain.InvitationStatus;
 import rest.domain.User;
 import rest.exception.EventNotFoundException;
+import rest.exception.InvitationNotFoundException;
 import rest.exception.InviteAlreadyExists;
 import rest.service.HappeningRepository;
 import rest.service.InvitationRepository;
@@ -28,10 +29,19 @@ public class InvitationController {
     @Autowired
     private InvitationRepository invitationRepository;
 
+    /**
+     * Eine Person zu einem Event einladen
+     * @param invitedUser   User der eingeladen wird
+     * @param happeningID   Event zu dem eingeladen wird
+     * @param invitestatus     Ein Invitationobjekt mit Invitationsstatus
+     * @return
+     */
     @RequestMapping(value="/invitation/{happeningID}/{invitedUser}",method = RequestMethod.POST)
     public @ResponseBody Invitation invite(@PathVariable(value="invitedUser") Long invitedUser,
                                                  @PathVariable(value="happeningID") Long happeningID,
-                                                 @RequestBody Invitation newInvite) {
+                                                 @RequestBody InvitationStatus invitestatus) {
+        Invitation newInvite = new Invitation();
+        newInvite.setStatus(invitestatus);
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         newInvite.setInviter(x.getUser());
         User invited;
@@ -47,7 +57,12 @@ public class InvitationController {
         if(!happeningRepository.exists(happeningID)){
             throw new EventNotFoundException("Happening does not exist");
         }
-        newInvite.setHappening(happeningRepository.findOne(happeningID));
+        Happening happy = happeningRepository.findOne(happeningID);
+        if(!happy.getCreator().equals(x.getUser()))
+        {
+            //TODO: Throw not authorized Exception, Check ob User ADMIN ist
+        }
+        newInvite.setHappening(happy);
         for(Invitation temp: invited.getinvited_happenings())
         {
             if(temp.getHappening().equals(newInvite.getHappening()))
@@ -60,30 +75,26 @@ public class InvitationController {
         return newInvite;
     }
 
+    /**
+     *  Ändert den Status einer Invitation
+     * @param inviteID  ID der Invitation die geändert werden soll
+     * @param status    Neuer Invitationstatus als JSONObjekt
+     * @return
+     */
+    @RequestMapping(value="/invited/{inviteID}/",method = RequestMethod.PUT)
+    public @ResponseBody Invitation updateInvite(@PathVariable(value="inviteID") Long inviteID,@RequestBody InvitationStatus status ) {
 
-
-
-  /*  @RequestMapping(value="/invitation",method = RequestMethod.POST)
-    public @ResponseBody Invitation invite2(@RequestBody(value="invited") String invited_User,
-                                            @RequestBody(value="invited_UserID") long invited_UserID,
-                                            @RequestBody(value="happening_ID") long happening_ID,
-                                            @RequestBody(value="status")InvitationStatus status) {
-        if(!happeningRepository.exists((happening_ID))){
-            throw new EventNotFoundException(happening_ID + " Does not exist");
-        }
+        if(!invitationRepository.exists(inviteID))
+            throw new InvitationNotFoundException(inviteID.toString() + " Does not exist");
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User inviter = x.getUser();
-        User invited;
-        if (!userRepository.exists(invited_UserID)) {
-            invited = new User();
-            invited.setPhoneNumber(invited_UserID);
-            userRepository.save(invited);
-        } else {
-            invited = userRepository.findByUserID(invited_UserID);
+        Invitation update = invitationRepository.findOne(inviteID);
+        if(x.getUser().equals(update.getinvited_User())){
+            update.setStatus(status);
         }
-        Invitation newInvite = new Invitation(invited,inviter,status, happeningRepository.findOne(happening_ID));
-        invitationRepository.save(newInvite);
-        return newInvite;
-
-    }*/
+        else
+        {
+            //TODO: AuthorityExcecption oder so
+        }
+        return invitationRepository.findOne(inviteID);
+    }
 }

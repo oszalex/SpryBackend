@@ -21,59 +21,40 @@ import java.util.List;
  * token wo wird der gespechert
  * lazy/eager loading
  *
- * TODO:    check cardinalities, renew password somtime(more than one device etc.
- *
+ * TODO:    check cardinalities, renew password some time(more than one device etc.)
+ * TODO:privacy? actuallity of location?
  */
 
 /**
  * undecided: picture, email
  */
+
 @Entity
 public class User {
-
     @javax.persistence.Id
     private long userID;
-    @JsonIgnore
     private Date birth;
-    @JsonIgnore
     private boolean isBored;
-    @JsonIgnore
     private boolean isFemale;
-    @JsonIgnore
     private String name;
-    @JsonIgnore
     static StringKeyGenerator generator = KeyGenerators.string();
-    @JsonIgnore
     private String password="";
-    @JsonIgnore
     private String token;
-
     @OneToMany
     private List<Happening> created_happenings;
-    @JsonIgnore
     @OneToMany(mappedBy="", fetch=FetchType.EAGER)
     private List<Invitation> invited_happenings;
-    //@ManyToOne
-
-    //TODO:privacy? actuallity of location?
-    //private Location location;
-
-
 
     public User(){
         invited_happenings = new LinkedList<Invitation>();
         created_happenings = new LinkedList<Happening>();
     }
-
-public List<Invitation> getInvited_happenings()
-{
-    return invited_happenings;
-}
+    @JsonIgnore
     public List<Invitation> getinvited_happenings()
     {
         return invited_happenings;
     }
-
+    @JsonIgnore
     public long getUserID() {
         return userID;
     }
