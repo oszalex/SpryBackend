@@ -2,7 +2,6 @@ package rest.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import rest.exception.InviteAlreadyExists;
 
 import javax.persistence.*;
 import java.util.Calendar;

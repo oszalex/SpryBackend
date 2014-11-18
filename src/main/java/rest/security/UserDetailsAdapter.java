@@ -4,12 +4,11 @@ package rest.security;
  * Created by chris on 08.11.14.
  */
 
-import java.util.Collection;
-
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import rest.domain.User;
+
+import java.util.Collection;
 
 /**
  * Adapts the {@link User} to the {@link UserDetails}.

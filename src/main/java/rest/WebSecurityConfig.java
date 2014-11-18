@@ -1,9 +1,5 @@
 package rest;
 
-/**
- * Created by chris on 31/10/14.
- */
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -28,7 +24,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .csrf().disable()
             .httpBasic();
-
     }
 
     @Autowired

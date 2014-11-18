@@ -1,6 +1,5 @@
-package rest.security;
+package rest.presentation;
 
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +9,8 @@ import rest.domain.InvitationStatus;
 import rest.domain.User;
 import rest.exception.EventNotFoundException;
 import rest.exception.InvitationNotFoundException;
-import rest.exception.InviteAlreadyExists;
 import rest.exception.NotAllowedException;
+import rest.security.UserDetailsAdapter;
 import rest.service.HappeningRepository;
 import rest.service.InvitationRepository;
 import rest.service.UserRepository;

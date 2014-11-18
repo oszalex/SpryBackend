@@ -1,4 +1,4 @@
-package rest.security;
+package rest.presentation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import rest.domain.PasswordObject;
 import rest.domain.User;
-import rest.exception.UsernameAlreadyInUseException;
 import rest.exception.WrongTokenException;
 import rest.service.UserRepository;
 

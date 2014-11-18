@@ -3,13 +3,7 @@ package rest.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-
 import java.util.*;
-import java.util.regex.Pattern;
-
-/**
- * Created by chris on 31/10/14.
- */
 
 @Entity
 public class Happening {

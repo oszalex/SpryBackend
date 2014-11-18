@@ -1,12 +1,4 @@
-package rest.security;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import rest.domain.Happening;
-import rest.service.UserRepository;
-
-import java.util.List;
+package rest.presentation;
 
 /**
  * Created by Alex on 17.11.2014.

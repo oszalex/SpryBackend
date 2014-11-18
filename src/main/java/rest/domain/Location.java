@@ -4,10 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
-/**
- * Created by chris on 08.11.14.
- */
-
 @Entity
 public class Location {
 

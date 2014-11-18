@@ -1,18 +1,13 @@
-package rest.security;
+package rest.presentation;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rest.domain.Happening;
 import rest.domain.Invitation;
-import rest.domain.PasswordObject;
-import rest.domain.User;
 import rest.exception.EventNotFoundException;
-import rest.exception.UsernameAlreadyInUseException;
-import rest.exception.WrongTokenException;
+import rest.security.UserDetailsAdapter;
 import rest.service.HappeningRepository;
 import rest.service.InvitationRepository;
 import rest.service.UserRepository;

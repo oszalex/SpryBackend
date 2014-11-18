@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import rest.service.UserRepository;
 import rest.domain.User;
+import rest.service.UserRepository;
 
 /**
  * Adapts the {@link UserRepository} to the {@link UserDetailsService} interface

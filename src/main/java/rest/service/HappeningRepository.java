@@ -4,8 +4,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import rest.domain.Happening;
 
-import java.util.List;
-
 /**
  * Created by chris on 31/10/14.
  */
