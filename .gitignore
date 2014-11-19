@@ -1,3 +1,4 @@
+ssl/*
 *.class
 build/
 gradle/
