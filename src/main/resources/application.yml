@@ -1,0 +1,86 @@
+project:
+  artifactId: spry
+  name: spry
+  version: X.X.X.X
+  description: spry
+
+info:
+  build:
+    artifact: ${project.artifactId}
+    name: ${project.name}
+    description: ${project.description}
+    version: ${project.version}
+  spring:
+    profiles: ${spring.profiles.active:default}
+  app:
+    name: ${vcap.application.name:com.gospry}:${vcap.application.instance_index:*}
+    start: ${vcap.application.start:N/A}
+
+spring:
+  main:
+    sources: com.gospry.api.Application
+  jpa:
+    show_sql: false
+
+#security:
+#  basic:
+#    enabled: true
+#  require_ssl: false
+#  enable_csrf: false
+#  ignored:
+#    - /register/**
+#    - /acitivate/**
+
+server:
+  tomcat:
+    # Write access log to target/logs/access_log.YYYY-MM-DD.log
+    # See http://tomcat.apache.org/tomcat-7.0-doc/api/org/apache/catalina/valves/AccessLogValve.html
+    accessLogEnabled: true
+    accessLogPattern: '%h %l %u %t "%r" %s %b %{Host}i %{Location}o'
+    baseDir: ''
+    backgroundProcessorDelay: 1
+
+logging:
+  file: logs/application_log
+  level:
+    ROOT: WARN
+    org.apache.http: WARN
+    org.springframework.jdbc: DEBUG
+    org.springframework.security: DEBUG
+    # turn up to DEBUG to diagnose GitHub API issues
+    org.apache.http.headers: WARN
+    # turn up to DEBUG to see information about guides as they are fetched and processed
+    com.gospry.api.presentation: WARN
+    # always log high-level information about application startup
+    com.gospry.api.security: ALL
+    com.gospry.api: INFO
+    # log generated password for admin endpoints, e.g. /env, /beans
+    # See http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
+    org.springframework.boot.autoconfigure.security.AuthenticationManagerConfiguration: ALL
+---
+
+spring:
+  profiles: default,staging,production
+security:
+  require_ssl: true
+server:
+  # when deployed to CloudFoundry, tomcat is behind a CDN proxy
+  tomcat:
+    remote_ip_header: x-forwarded-for
+    protocol_header: x-forwarded-proto
+
+---
+
+spring:
+  profiles: default
+cache:
+  timetolive: 0
+---
+
+spring:
+  profiles: staging
+
+---
+
+spring:
+  profiles: production
