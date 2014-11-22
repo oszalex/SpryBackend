@@ -5,13 +5,17 @@ import javax.persistence.*;
 import java.util.Calendar;
 
 @Entity
+@Table(name="invitation")
 public class Invitation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="ID", nullable=false, unique=true)
     private long invitationId;
+
     @JsonIgnore
     @ManyToOne
-    private User invited_User;
+    private User invitedUser;
+
     @JsonIgnore
     @OneToOne
     private User inviter;
@@ -22,6 +26,7 @@ public class Invitation {
 
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "happening_id")
     private Happening happening;
 
     public Invitation(){}
@@ -37,12 +42,10 @@ public class Invitation {
         return invitationId;
     }
 
-    public User getinvited_User() {
-        return invited_User;
-    }
+    public long getHappeningId() {return happening.getID(); }
 
     public void setinvited_User(User invited_User) {
-        this.invited_User = invited_User;
+        this.invitedUser = invited_User;
         if (!invited_User.getinvited_happenings().contains(this)) {
             invited_User.getinvited_happenings().add(this);
         }
@@ -51,12 +54,7 @@ public class Invitation {
     public User getInviter() {
         return inviter;
     }
-    public long getinviterID() {
-        return inviter.getUserID();
-    }
-    public long getinvited_UserID() {
-        return invited_User.getUserID();
-    }
+
     public void setInviter(User inviter) {
         this.inviter = inviter;
     }

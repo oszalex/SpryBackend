@@ -1,5 +1,6 @@
 package com.gospry.api.presentation;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.gospry.api.domain.Happening;
 import com.gospry.api.domain.Invitation;
 import com.gospry.api.domain.InvitationStatus;
@@ -81,26 +82,31 @@ public class InvitationController {
 
     /**
      *  Ändert den Status einer Invitation
-     * @param inviteID  ID der Invitation die geändert werden soll
+     * @param happeningID  ID der Invitation die geändert werden soll
      * @param status    Neuer Invitationstatus als JSONObjekt
      * @return
      */
-    @RequestMapping(value="/invitation/{inviteID}/",method = RequestMethod.PUT)
-    public @ResponseBody Invitation updateInvite(@PathVariable(value="inviteID") Long inviteID,@RequestBody Invitation status ) {
+    @RequestMapping(value="/invitation/{happeningID}", method = RequestMethod.PUT)
+    public @ResponseBody Invitation updateInvite(@PathVariable(value="happeningID") Long happeningID, @RequestBody InvitationStatus status ) {
 
-        if(!invitationRepository.exists(inviteID))
-            throw new InvitationNotFoundException(inviteID.toString() + " Does not exist");
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Invitation update = invitationRepository.findOne(inviteID);
-        if(x.getUser().equals(update.getinvited_User())){
-            update.setStatus(status.getStatus());
-            invitationRepository.save(update);
+        User invitedUser = x.getUser();
+
+        Happening e = happeningRepository.findOne(happeningID);
+
+        if(e== null){
+            throw new EventNotFoundException(happeningID.toString());
         }
-        else
-        {
-            throw new NotAllowedException("Wrong User?");
+
+        Invitation toUpdate = invitationRepository.findByInvitedUserAndHappening(invitedUser, e);
+
+        if(toUpdate == null ){
+            throw new InvitationNotFoundException("userID: " + invitedUser.getName() + " happening: " + e.getID());
         }
-        return invitationRepository.findOne(inviteID);
+
+        toUpdate.setStatus(status);
+
+        return invitationRepository.save(toUpdate);
     }
 
     /**
@@ -108,10 +114,10 @@ public class InvitationController {
      *  //TODO:geht nicht
      * @return
      */
-    @RequestMapping(value="/invitation/",method = RequestMethod.GET)
+    @RequestMapping(value="/invitation",method = RequestMethod.GET)
     public @ResponseBody List<Invitation> getInvites() {
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User loggedIn = x.getUser();
-        return loggedIn.getinvited_happenings();
+        return invitationRepository.findByInvitedUser(loggedIn);
     }
 }

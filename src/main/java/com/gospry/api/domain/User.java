@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,9 +25,13 @@ import java.util.List;
  */
 
 @Entity
+@Table(name="user")
 public class User {
-    @javax.persistence.Id
+
+    @Id
+    @Column(name="ID", unique=true)
     private long userID;
+
     private Date birth;
     private boolean isBored;
     private boolean isFemale;
@@ -37,8 +39,11 @@ public class User {
     static StringKeyGenerator generator = KeyGenerators.string();
     private String password="";
     private String token;
+
+
     @OneToMany
     private List<Happening> created_happenings;
+
     @OneToMany(mappedBy="", fetch=FetchType.EAGER)
     private List<Invitation> invited_happenings;
 

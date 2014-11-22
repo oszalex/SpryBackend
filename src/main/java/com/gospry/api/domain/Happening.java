@@ -6,17 +6,22 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@Table(name="happening")
 public class Happening {
     private final static TimeZone tz_gmt = TimeZone.getTimeZone("GMT");
 
     // unique happening id
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="ID", nullable=false, unique=true)
     private long Id;
 
     // invited people
+    /**
+     * wenn ein happening gelöscht wird, sollen auch alle invitations gelöscht werden dh cascade all
+     */
     @JsonIgnore
-    @OneToMany(targetEntity= Invitation.class, mappedBy="happening", fetch=FetchType.EAGER)
+    @OneToMany(targetEntity= Invitation.class, mappedBy="happening", fetch=FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<Invitation> invitations;
 
     // Dauer
@@ -44,11 +49,13 @@ public class Happening {
 
     // location
     @ManyToOne
+    @JoinColumn(name="location_id", referencedColumnName="ID")
     private Location location;
 
     //happening creator
     @JsonIgnore
     @ManyToOne  //(targetEntity=User.class, fetch=FetchType.EAGER)
+    @JoinColumn(name="user_id", referencedColumnName="ID")
     private User creator;
 
     // is this a public
