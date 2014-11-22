@@ -17,8 +17,8 @@ apply plugin: 'war'
 
 war {
     baseName = 'spry'
-    version =  '2'
-    archiveName = 'v2.war'
+    version =  '3'
+    archiveName = 'v3.war'
 }
 
 repositories {
