@@ -7,8 +7,7 @@ compile it:
 
 run it:
 
-> java -jar build/libs/ase-0.1.0.jar
-
+> ./gradlew bootRun
 
 
 
