@@ -1,4 +1,4 @@
-ASE
+SpryBackend
 ===
 
 compile it:
@@ -7,8 +7,7 @@ compile it:
 
 run it:
 
-> java -jar build/libs/ase-0.1.0.jar
-
+> ./gradlew bootRun
 
 
 
@@ -30,14 +29,14 @@ So if the verification in the DaoAuthenticationProvider suits your needs. Then y
 Install Tomcat
 ---
 
-> sudo apt-get install tomcat7
+> sudo apt-get install tomcat8
 
-> sudo touch /etc/authbind/byport/80
-> sudo chmod 500 /etc/authbind/byport/80
-> sudo chown tomcat7 /etc/authbind/byport/80
+> sudo touch /etc/authbind/byport/443
+> sudo chmod 500 /etc/authbind/byport/443
+> sudo chown tomcat7 /etc/authbind/byport/443
 
-in `/etc/default/tomcat7` uncommend `Autobind=yes`and change port 8080 in `/etc/tomcat7/server.xml` to 80. Restart tomcat
-by calling `service tomcat7 restart`.
+in `/etc/default/tomcat7` uncommend `Autobind=yes`and change port 8443 in `/etc/tomcat7/server.xml` to 443. Restart tomcat and turn ssl on.
+by calling `service tomcat8 restart`.
 
 You can test it with `netstat -a -n`.
 
@@ -45,9 +44,9 @@ You can test it with `netstat -a -n`.
 Deploy to Tomcat
 ---
 
-Upload war to `/var/lib/tomcat7/webapps/` (e.g. `scp v1.war root@api.gospry.com:/var/lib/tomcat7/webapps/`).
+Upload war to `/var/lib/tomcat8/webapps/` (e.g. `scp v1.war root@api.gospry.com:/var/lib/tomcat7/webapps/`).
 
 Interesting Tomcat files/locations:
 
-> /var/log/tomcat7/catalina.2014-11-19.log
-> /var/lib/tomcat7/logs
+> /var/log/tomcat8/logs/catalina.out  
+> /var/log/tomcat8/logs/application_v2  
