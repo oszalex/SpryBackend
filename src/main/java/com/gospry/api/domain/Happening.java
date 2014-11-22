@@ -40,7 +40,7 @@ public class Happening {
 
     // private description
     // only for event agencies
-    private char description[] = new char[140];
+    private String description = new String("");
 
     // location
     @ManyToOne
@@ -123,11 +123,11 @@ public class Happening {
         this.price_euro = price_euro;
     }
 
-    public char[] getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(char[] description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

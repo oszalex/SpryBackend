@@ -57,6 +57,7 @@ public class InvitationController {
             invited = userRepository.findByUserID(invitedUser);
         }
         if(!happeningRepository.exists(happeningID)){
+
             throw new EventNotFoundException("Happening does not exist");
         }
         Happening happy = happeningRepository.findOne(happeningID);

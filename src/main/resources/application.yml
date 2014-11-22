@@ -41,22 +41,14 @@ server:
     backgroundProcessorDelay: 1
 
 logging:
-  file: logs/application_log
+  file: logs/application_v2
   level:
-    ROOT: WARN
-    org.apache.http: WARN
-    org.springframework.jdbc: DEBUG
-    org.springframework.security: DEBUG
-    # turn up to DEBUG to diagnose GitHub API issues
-    org.apache.http.headers: WARN
-    # turn up to DEBUG to see information about guides as they are fetched and processed
-    com.gospry.api.presentation: WARN
-    # always log high-level information about application startup
-    com.gospry.api.security: ALL
-    com.gospry.api: INFO
-    # log generated password for admin endpoints, e.g. /env, /beans
-    # See http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
-    org.springframework.boot.autoconfigure.security.AuthenticationManagerConfiguration: ALL
+    ROOT: DEBUG
+    org.apache.http: INFO
+    org.springframework: ALL
+    org.springframework.jdbc: 'WARN'
+    com.gospry.api.presentation: 'DEBUG'
+    com.gospry.api: 'DEBUG'
 ---
 
 spring:

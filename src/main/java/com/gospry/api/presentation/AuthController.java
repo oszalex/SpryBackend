@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.logging.Logger;
+
 /**
  *
  * TODO:
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AuthController {
+    static Logger log = Logger.getLogger(AuthController.class.getName());
 
     @Autowired
     private UserRepository userRepository;
@@ -60,6 +63,7 @@ public class AuthController {
             if (token.equals(u.getToken())) return new PasswordObject(u.getPassword());
             else {
                 //TODO: inform APP(errorcode) to reentry number
+                log.warning("wrong token dude!");
                 throw new WrongTokenException("wrong token");
             }
         }else {

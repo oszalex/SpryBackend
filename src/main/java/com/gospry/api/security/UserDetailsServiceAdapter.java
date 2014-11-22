@@ -25,12 +25,10 @@ public class UserDetailsServiceAdapter implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        log.warning("ROOOOOOOOOOOOOOOOOOOOOOOOOOO---------------------");
-
         User account = userRepository.findByUserID(Long.valueOf(username));
 
         if (account == null) {
+            log.warning("User tried to log in: " + username);
             throw new UsernameNotFoundException(username);
         }
 

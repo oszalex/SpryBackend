@@ -13,9 +13,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 public class HappeningController {
+    static Logger log = Logger.getLogger(HappeningController.class.getName());
 
     @Autowired
     private UserRepository userRepository;
@@ -32,8 +34,11 @@ public class HappeningController {
     @RequestMapping(value="/happening/{happeningID}",method = RequestMethod.GET)
     public @ResponseBody Happening showHappening(@PathVariable(value="happeningID") Long happeningID) {
 
-        if(!happeningRepository.exists(happeningID))
+        if(!happeningRepository.exists(happeningID)){
+            log.warning("Event does not exist");
             throw new EventNotFoundException(happeningID.toString() + " Event does not exist");
+        }
+
         //TODO: Überprüfung ob User Event sehen darf
         return happeningRepository.findOne(happeningID);
     }
@@ -46,8 +51,11 @@ public class HappeningController {
     @RequestMapping(value="/happening/{happeningID}",method = RequestMethod.PUT)
     public @ResponseBody Happening updateHappening(@PathVariable(value="happeningID") Long happeningID, @RequestBody JSONPObject jason) {
 
-        if(!happeningRepository.exists(happeningID))
+        if(!happeningRepository.exists(happeningID)){
+            log.warning("event does not exists dude!");
             throw new EventNotFoundException(happeningID.toString() + " Event does not exist");
+        }
+
         Happening happy = happeningRepository.findOne(happeningID);
         UserDetailsAdapter x= (UserDetailsAdapter)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(!happy.getCreator().equals(x.getUser()))
@@ -89,8 +97,11 @@ public class HappeningController {
     @RequestMapping(value="/happening/{happeningID}/invited",method = RequestMethod.GET)
     public @ResponseBody List<Invitation> showInvites(@PathVariable(value="happeningID") Long happeningID) {
 
-        if(!happeningRepository.exists(happeningID))
+        if(!happeningRepository.exists(happeningID)){
+            log.warning("event does not exist");
             throw new EventNotFoundException(happeningID.toString() + " Does not exist");
+        }
+
 
         return happeningRepository.findOne(happeningID).getInvitations();
     }
