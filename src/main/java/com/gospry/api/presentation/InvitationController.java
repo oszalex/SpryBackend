@@ -1,6 +1,5 @@
 package com.gospry.api.presentation;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.gospry.api.domain.Happening;
 import com.gospry.api.domain.Invitation;
 import com.gospry.api.domain.InvitationStatus;
@@ -62,7 +61,7 @@ public class InvitationController {
             throw new EventNotFoundException("Happening does not exist");
         }
         Happening happy = happeningRepository.findOne(happeningID);
-        if(!happy.getCreator().equals(x.getUser()))
+        if (happy.getCreator().getUserID() != x.getUser().getUserID())
         {
             throw new NotAllowedException("Wrong User?");
             //TODO:Check ob User ADMIN ist, dann wärs OK

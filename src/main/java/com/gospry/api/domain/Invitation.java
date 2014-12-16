@@ -1,18 +1,19 @@
 package com.gospry.api.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Calendar;
 
 @Entity
-@Table(name="invitation")
+@Table(name = "invitation")
 public class Invitation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ID", nullable=false, unique=true)
+    @Column(name = "ID", nullable = false, unique = true)
     private long invitationId;
 
-    @JsonIgnore
+
     @ManyToOne
     private User invitedUser;
 
@@ -29,7 +30,8 @@ public class Invitation {
     @JoinColumn(name = "happening_id")
     private Happening happening;
 
-    public Invitation(){}
+    public Invitation() {
+    }
 
     public Invitation(User invited_User, User inviter, InvitationStatus status, Happening happy) {
         this.setinvited_User(invited_User);
@@ -42,7 +44,13 @@ public class Invitation {
         return invitationId;
     }
 
-    public long getHappeningId() {return happening.getID(); }
+    public long getHappeningId() {
+        return happening.getID();
+    }
+
+    public long getInvitedUser() {
+        return invitedUser.getUserID();
+    }
 
     public void setinvited_User(User invited_User) {
         this.invitedUser = invited_User;
