@@ -101,7 +101,7 @@ public class HappeningController {
         User loggedin = x.getUser();
         myhappenings = loggedin.gethappenings();
 
-        return (List) happeningRepository.findAll();
+        return (List) myhappenings;
     }
 
     /**
@@ -114,9 +114,16 @@ public class HappeningController {
     public
     @ResponseBody
     Happening createEvent(@RequestBody Happening newHappening) {
-        UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        newHappening.setCreator(x.getUser());
-        newHappening = happeningRepository.save(newHappening);
+        try {
+            UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User currentUser = x.getUser();
+            newHappening.setCreator(currentUser);
+            newHappening = happeningRepository.save(newHappening);
+            currentUser.addcreatedHappening(newHappening);
+            userRepository.save(currentUser);
+        } catch (Exception e) {
+            System.out.print(e.toString());
+        }
         return newHappening;
     }
 

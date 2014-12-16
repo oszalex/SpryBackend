@@ -28,23 +28,25 @@ import java.util.List;
 @Table(name="user")
 public class User {
 
+    static StringKeyGenerator generator = KeyGenerators.string();
     @Id
     @Column(name="ID", unique=true)
     private long userID;
-
     private Date birth;
     private boolean isBored;
     private boolean isFemale;
     private String name;
-    static StringKeyGenerator generator = KeyGenerators.string();
     private String password="";
     private String token;
 
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "happening_id")
     private List<Happening> created_happenings;
 
-    @OneToMany(mappedBy="", fetch=FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
+    //@OneToMany
+    @JoinColumn(name = "invitation_id")
     private List<Invitation> invited_happenings;
 
     public User(){
@@ -57,10 +59,24 @@ public class User {
         return invited_happenings;
     }
 
+    public void addcreatedHappening(Happening newHappening) {
+        created_happenings.add(newHappening);
+    }
+
+    //TODO: schöner machen Sets anstatt lists verwenden?
+    public void addinvitation(Invitation invite) {
+        for (Invitation temp : invited_happenings) {
+            if (temp.getHappening().equals(invite.getHappening())) {
+                return;
+            }
+        }
+        invited_happenings.add(invite);
+    }
+
     public List<Happening> gethappenings()
     {
         //TODO:
-        List<Happening> happys = new LinkedList<Happening>();
+        List<Happening> happys = created_happenings;
         for(Invitation invitation : invited_happenings )
         {
             happys.add(invitation.getHappening());

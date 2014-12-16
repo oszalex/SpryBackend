@@ -13,12 +13,15 @@ public class Invitation {
     @Column(name = "ID", nullable = false, unique = true)
     private long invitationId;
 
-
+    //TODO:
     @ManyToOne
+    //@OneToOne
+    @JoinColumn(name = "invitedUser", referencedColumnName = "id")
     private User invitedUser;
 
     @JsonIgnore
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "inviter", referencedColumnName = "id")
     private User inviter;
 
     private InvitationStatus status;
@@ -27,7 +30,7 @@ public class Invitation {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "happening_id")
+    @JoinColumn(name = "happening_id", referencedColumnName = "id")
     private Happening happening;
 
     public Invitation() {

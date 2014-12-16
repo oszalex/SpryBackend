@@ -67,15 +67,25 @@ public class InvitationController {
             //TODO:Check ob User ADMIN ist, dann wärs OK
         }
         newInvite.setHappening(happy);
+        //Check for previous invitation
         for(Invitation temp: invited.getinvited_happenings())
         {
+            //TODO: implement equals
             if(temp.getHappening().equals(newInvite.getHappening()))
             {
                return temp;
             }
         }
         newInvite.setinvited_User(invited);
-        invitationRepository.save(newInvite);
+
+        newInvite = invitationRepository.save(newInvite);
+        //     invited.addinvitation(newInvite);
+        try {
+            invited = userRepository.save(invited);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        //TODO:buggy wenn inviteduser= inviter ist...
         return newInvite;
     }
 

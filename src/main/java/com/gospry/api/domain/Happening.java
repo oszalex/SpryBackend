@@ -9,32 +9,25 @@ import java.util.*;
 @Table(name="happening")
 public class Happening {
     private final static TimeZone tz_gmt = TimeZone.getTimeZone("GMT");
+    // time of happening creation
+    private Calendar createdAt = new GregorianCalendar(tz_gmt);
 
+    // invited people
+    // start time of event
+    private Calendar start_time = new GregorianCalendar(tz_gmt);
     // unique happening id
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ID", nullable=false, unique=true)
+    @Column(name = "id", nullable = false, unique = true)
     private long Id;
-
-    // invited people
     /**
      * wenn ein happening gelöscht wird, sollen auch alle invitations gelöscht werden dh cascade all
      */
     @JsonIgnore
-    @OneToMany(targetEntity= Invitation.class, mappedBy="happening", fetch=FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(targetEntity = Invitation.class, mappedBy = "happening", fetch = FetchType.EAGER, cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<Invitation> invitations;
-
     // Dauer
     private int duration = 120;
-
-    // time of happening creation
-    private Calendar createdAt = new GregorianCalendar(tz_gmt);
-
-    // start time of event
-    private Calendar start_time = new GregorianCalendar(tz_gmt);
-
-
-
     // person limit
     private int max_attending = Integer.MAX_VALUE;
 
@@ -47,15 +40,16 @@ public class Happening {
     // only for event agencies
     private String description = new String("");
 
-    // location
-    @ManyToOne
+    // TODO: location - this is a workaround
+    /* @ManyToOne
     @JoinColumn(name="location_id", referencedColumnName="ID")
     private Location location;
-
+    */
+    private String location;
     //happening creator
     @JsonIgnore
     @ManyToOne  //(targetEntity=User.class, fetch=FetchType.EAGER)
-    @JoinColumn(name="user_id", referencedColumnName="ID")
+    @JoinColumn(name = "creator_id", referencedColumnName = "id")
     private User creator;
 
     // is this a public
@@ -74,12 +68,11 @@ public class Happening {
     public long getID() {
         return Id;
     }
-    public void setCreator(User creator) {
-        this.creator  = creator;
-    }
+
     public long getcreatorID() {
         return creator.getUserID();
     }
+
     public int getDuration() {
         return duration;
     }
@@ -95,15 +88,25 @@ public class Happening {
     public Calendar getStart_time() {
         return start_time;
     }
+
     public Calendar getCreatedAt() {
         return createdAt;
     }
+
     public User getCreator() {
         return creator;
     }
 
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
     public boolean getIsPublic() {
         return isPublic;
+    }
+
+    public void setIsPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public int getMax_attending() {
@@ -138,7 +141,12 @@ public class Happening {
         this.description = description;
     }
 
-    public void setIsPublic(boolean isPublic) {
-        this.isPublic = isPublic;
+    public String getLocation() {
+        return location;
     }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
 }
