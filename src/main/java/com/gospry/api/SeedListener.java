@@ -7,21 +7,20 @@ import com.gospry.api.domain.User;
 import com.gospry.api.service.HappeningRepository;
 import com.gospry.api.service.InvitationRepository;
 import com.gospry.api.service.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class SeedListener implements ApplicationListener<ContextRefreshedEvent> {
 
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private HappeningRepository happeningRepository;
+    @Autowired
     private InvitationRepository invitationRepository;
-
-    public SeedListener(UserRepository ur, HappeningRepository hr, InvitationRepository ir) {
-        this.userRepository = ur;
-        this.happeningRepository = hr;
-        this.invitationRepository = ir;
-    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
