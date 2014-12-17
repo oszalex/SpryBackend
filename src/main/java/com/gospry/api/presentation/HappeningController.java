@@ -3,14 +3,11 @@ package com.gospry.api.presentation;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.gospry.api.domain.Happening;
 import com.gospry.api.domain.Invitation;
-import com.gospry.api.domain.User;
 import com.gospry.api.exception.EventNotFoundException;
-import com.gospry.api.security.UserDetailsAdapter;
 import com.gospry.api.service.HappeningRepository;
 import com.gospry.api.service.InvitationRepository;
 import com.gospry.api.service.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -19,7 +16,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 @RestController
-public class HappeningController {
+public class HappeningController extends AbstractController {
     static Logger log = Logger.getLogger(HappeningController.class.getName());
 
     @Autowired
@@ -66,8 +63,8 @@ public class HappeningController {
         }
 
         Happening happy = happeningRepository.findOne(happeningID);
-        UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!happy.getCreator().equals(x.getUser())) {
+
+        if (!happy.getCreator().equals(getCurrentUser())) {
             //TODO: Throw Not Allowed Exception
         }
         //TODO: JASON nach validen parametern absuchen und dem Event hinzufügen
@@ -81,16 +78,13 @@ public class HappeningController {
     public
     @ResponseBody
     Set<Happening> list() {
-        UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = x.getUser();
-
         HashSet<Happening> happenings = new HashSet<>();
 
         // get all created
-        happenings.addAll(happeningRepository.findByCreator(user));
+        happenings.addAll(happeningRepository.findByCreator(getCurrentUser()));
 
         // get all invited
-        for(Invitation i : invitationRepository.findByInvitedUser(user)){
+        for (Invitation i : invitationRepository.findByInvitedUser(getCurrentUser())) {
             happenings.add(i.getHappening());
         }
 
@@ -113,12 +107,10 @@ public class HappeningController {
     @ResponseBody
     Happening createEvent(@RequestBody Happening newHappening) {
         try {
-            UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            User currentUser = x.getUser();
-            newHappening.setCreator(currentUser);
+            newHappening.setCreator(getCurrentUser());
             newHappening = happeningRepository.save(newHappening);
-            currentUser.addcreatedHappening(newHappening);
-            userRepository.save(currentUser);
+            getCurrentUser().addcreatedHappening(newHappening);
+            userRepository.save(getCurrentUser());
         } catch (Exception e) {
             System.out.print(e.toString());
         }

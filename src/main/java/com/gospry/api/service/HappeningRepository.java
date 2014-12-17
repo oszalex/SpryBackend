@@ -10,5 +10,6 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "happening", path = "happening")
 public interface HappeningRepository extends JpaRepository<Happening, Long> {
     List<Happening> findByCreator(User creator);
+
     List<Happening> findByIsPublic(boolean bool);
 }

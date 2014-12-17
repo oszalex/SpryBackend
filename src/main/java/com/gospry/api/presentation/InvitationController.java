@@ -7,21 +7,16 @@ import com.gospry.api.domain.User;
 import com.gospry.api.exception.EventNotFoundException;
 import com.gospry.api.exception.InvitationNotFoundException;
 import com.gospry.api.exception.NotAllowedException;
-import com.gospry.api.security.UserDetailsAdapter;
 import com.gospry.api.service.HappeningRepository;
 import com.gospry.api.service.InvitationRepository;
 import com.gospry.api.service.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by Alex on 16.11.2014.
- */
 @RestController
-public class InvitationController {
+public class InvitationController extends AbstractController {
 
     @Autowired
     private UserRepository userRepository;
@@ -46,8 +41,8 @@ public class InvitationController {
             , @RequestBody Invitation invitestatus) {
         Invitation newInvite = new Invitation();
         newInvite.setStatus(InvitationStatus.INVITED);
-        UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        newInvite.setInviter(x.getUser());
+
+        newInvite.setInviter(getCurrentUser());
         User invited;
         long a = invitationRepository.count();
         if (!userRepository.exists(invitedUser)) {
@@ -62,7 +57,7 @@ public class InvitationController {
             throw new EventNotFoundException("Happening does not exist");
         }
         Happening happy = happeningRepository.findOne(happeningID);
-        if (happy.getCreator().getUserID() != x.getUser().getUserID()) {
+        if (happy.getCreator().getUserID() != getCurrentUser().getUserID()) {
             throw new NotAllowedException("Wrong User?");
             //TODO:Check ob User ADMIN ist, dann wärs OK
         }
@@ -98,20 +93,16 @@ public class InvitationController {
     public
     @ResponseBody
     Invitation updateInvite(@PathVariable(value = "happeningID") Long happeningID, @RequestBody InvitationStatus status) {
-
-        UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User invitedUser = x.getUser();
-
         Happening e = happeningRepository.findOne(happeningID);
 
         if (e == null) {
             throw new EventNotFoundException(happeningID.toString());
         }
 
-        Invitation toUpdate = invitationRepository.findByInvitedUserAndHappening(invitedUser, e);
+        Invitation toUpdate = invitationRepository.findByInvitedUserAndHappening(getCurrentUser(), e);
 
         if (toUpdate == null) {
-            throw new InvitationNotFoundException("userID: " + invitedUser.getName() + " happening: " + e.getID());
+            throw new InvitationNotFoundException("userID: " + getCurrentUser().getName() + " happening: " + e.getID());
         }
 
         toUpdate.setStatus(status);
@@ -129,8 +120,6 @@ public class InvitationController {
     public
     @ResponseBody
     List<Invitation> getInvites() {
-        UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User loggedIn = x.getUser();
-        return invitationRepository.findByInvitedUser(loggedIn);
+        return invitationRepository.findByInvitedUser(getCurrentUser());
     }
 }

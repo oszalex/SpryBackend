@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
 import java.util.logging.Logger;
 
 /**
@@ -20,7 +22,7 @@ import java.util.logging.Logger;
  */
 
 @RestController
-public class AuthController {
+public class AuthController extends AbstractController {
     static Logger log = Logger.getLogger(AuthController.class.getName());
 
     @Autowired
@@ -66,5 +68,18 @@ public class AuthController {
         } else {
             throw new ResourceNotFoundException();
         }
+    }
+
+    /**
+     * logout
+     *
+     * destroys session
+     * @return empty string
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout() {
+        request.getSession().invalidate();
+
+        return new String();
     }
 }

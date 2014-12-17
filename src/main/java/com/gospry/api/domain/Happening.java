@@ -151,10 +151,10 @@ public class Happening {
     }
 
     @Override
-    public boolean equals(Object h){
-        if(h == null) return false;
+    public boolean equals(Object h) {
+        if (h == null) return false;
 
-        if(h instanceof Happening){
+        if (h instanceof Happening) {
             if (this.Id == ((Happening) h).Id) return true;
         }
 

@@ -95,10 +95,10 @@ public class Invitation {
 
 
     @Override
-    public boolean equals(Object h){
-        if(h == null) return false;
+    public boolean equals(Object h) {
+        if (h == null) return false;
 
-        if(h instanceof Invitation){
+        if (h instanceof Invitation) {
             if (this.invitationId == ((Invitation) h).invitationId) return true;
         }
 
