@@ -48,7 +48,7 @@ public class SeedListener implements ApplicationListener<ContextRefreshedEvent> 
         some_public_event = happeningRepository.save(some_public_event);
         some_private_event = happeningRepository.save(some_private_event);
 
-        Invitation chris_to_alex = new Invitation(chris, alex, InvitationStatus.ATTENDING,some_private_event);
+        Invitation chris_to_alex = new Invitation(chris, alex, InvitationStatus.ATTENDING, some_private_event);
         invitationRepository.save(chris_to_alex);
     }
 }

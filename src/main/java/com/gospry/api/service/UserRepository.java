@@ -7,6 +7,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     /**
      * Return an {@link User} instance with an email address.
+     *
      * @param userID an email address as a String
      * @return a {@link User instance} or null if not found.
      */

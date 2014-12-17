@@ -33,7 +33,7 @@ public class Application extends SpringBootServletInitializer {
 
 
     @ExceptionHandler({AuthenticationException.class, BadCredentialsException.class, AccessDeniedException.class})
-    @ResponseStatus(value= HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public ErrorInfo unauthorized(HttpServletRequest req, AuthenticationException ex) {
         return new ErrorInfo(req.getRequestURL().toString(), ex);
     }

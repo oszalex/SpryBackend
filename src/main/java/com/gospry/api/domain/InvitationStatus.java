@@ -8,23 +8,26 @@ public enum InvitationStatus {
 
     private final String value;
 
-    private InvitationStatus(String value) { this.value = value; }
-
-    @JsonValue
-    public String value() { return value; }
-
+    private InvitationStatus(String value) {
+        this.value = value;
+    }
 
     @JsonCreator
     public static InvitationStatus forValue(String v) {
-        if(v.equals("invited"))
+        if (v.equals("invited"))
             return InvitationStatus.INVITED;
-        if(v.equals("not_attending"))
+        if (v.equals("not_attending"))
             return InvitationStatus.NOT_ATTENDING;
-        if(v.equals("attending"))
+        if (v.equals("attending"))
             return InvitationStatus.ATTENDING;
-        if(v.equals("maybe"))
+        if (v.equals("maybe"))
             return InvitationStatus.MAYBE;
 
         return InvitationStatus.NOT_INVITED;
+    }
+
+    @JsonValue
+    public String value() {
+        return value;
     }
 }

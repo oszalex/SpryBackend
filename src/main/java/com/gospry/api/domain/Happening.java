@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name="happening")
+@Table(name = "happening")
 public class Happening {
     private final static TimeZone tz_gmt = TimeZone.getTimeZone("GMT");
     // time of happening creation
@@ -56,8 +56,8 @@ public class Happening {
     private boolean isPublic;
 
 
-
     private ArrayList<String> keywords = new ArrayList<String>();
+
     public ArrayList<String> getKeywords() {
         return keywords;
     }
@@ -65,6 +65,7 @@ public class Happening {
     public void setKeywords(ArrayList<String> keywords) {
         this.keywords = keywords;
     }
+
     public long getID() {
         return Id;
     }

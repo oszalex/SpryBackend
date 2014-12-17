@@ -32,16 +32,18 @@ public class InvitationController {
 
     /**
      * Eine Person zu einem Event einladen
-     * @param invitedUser   User der eingeladen wird
-     * @param happeningID   Event zu dem eingeladen wird
-     * @param invitestatus     Ein Invitationobjekt mit Invitationsstatus
+     *
+     * @param invitedUser  User der eingeladen wird
+     * @param happeningID  Event zu dem eingeladen wird
+     * @param invitestatus Ein Invitationobjekt mit Invitationsstatus
      * @return
      */
-    @RequestMapping(value="/invitation/{happeningID}/{invitedUser}",method = RequestMethod.POST)
-    public @ResponseBody
-    Invitation invite(@PathVariable(value="invitedUser") Long invitedUser,
-                                                 @PathVariable(value="happeningID") Long happeningID
-                                                 ,@RequestBody Invitation invitestatus) {
+    @RequestMapping(value = "/invitation/{happeningID}/{invitedUser}", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Invitation invite(@PathVariable(value = "invitedUser") Long invitedUser,
+                      @PathVariable(value = "happeningID") Long happeningID
+            , @RequestBody Invitation invitestatus) {
         Invitation newInvite = new Invitation();
         newInvite.setStatus(InvitationStatus.INVITED);
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -52,28 +54,24 @@ public class InvitationController {
             invited = new User();
             invited.setPhoneNumber(invitedUser);
             invited = userRepository.save(invited);
-        }
-        else {
+        } else {
             invited = userRepository.findByUserID(invitedUser);
         }
-        if(!happeningRepository.exists(happeningID)){
+        if (!happeningRepository.exists(happeningID)) {
 
             throw new EventNotFoundException("Happening does not exist");
         }
         Happening happy = happeningRepository.findOne(happeningID);
-        if (happy.getCreator().getUserID() != x.getUser().getUserID())
-        {
+        if (happy.getCreator().getUserID() != x.getUser().getUserID()) {
             throw new NotAllowedException("Wrong User?");
             //TODO:Check ob User ADMIN ist, dann wärs OK
         }
         newInvite.setHappening(happy);
         //Check for previous invitation
-        for(Invitation temp: invited.getinvited_happenings())
-        {
+        for (Invitation temp : invited.getinvited_happenings()) {
             //TODO: implement equals
-            if(temp.getHappening().equals(newInvite.getHappening()))
-            {
-               return temp;
+            if (temp.getHappening().equals(newInvite.getHappening())) {
+                return temp;
             }
         }
         newInvite.setinvited_User(invited);
@@ -90,26 +88,29 @@ public class InvitationController {
     }
 
     /**
-     *  Ändert den Status einer Invitation
-     * @param happeningID  ID der Invitation die geändert werden soll
-     * @param status    Neuer Invitationstatus als JSONObjekt
+     * Ändert den Status einer Invitation
+     *
+     * @param happeningID ID der Invitation die geändert werden soll
+     * @param status      Neuer Invitationstatus als JSONObjekt
      * @return
      */
-    @RequestMapping(value="/invitation/{happeningID}", method = RequestMethod.PUT)
-    public @ResponseBody Invitation updateInvite(@PathVariable(value="happeningID") Long happeningID, @RequestBody InvitationStatus status ) {
+    @RequestMapping(value = "/invitation/{happeningID}", method = RequestMethod.PUT)
+    public
+    @ResponseBody
+    Invitation updateInvite(@PathVariable(value = "happeningID") Long happeningID, @RequestBody InvitationStatus status) {
 
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User invitedUser = x.getUser();
 
         Happening e = happeningRepository.findOne(happeningID);
 
-        if(e== null){
+        if (e == null) {
             throw new EventNotFoundException(happeningID.toString());
         }
 
         Invitation toUpdate = invitationRepository.findByInvitedUserAndHappening(invitedUser, e);
 
-        if(toUpdate == null ){
+        if (toUpdate == null) {
             throw new InvitationNotFoundException("userID: " + invitedUser.getName() + " happening: " + e.getID());
         }
 
@@ -119,12 +120,15 @@ public class InvitationController {
     }
 
     /**
-     *  Zeigt Invitations des eingeloggten users
-     *  //TODO:geht nicht
+     * Zeigt Invitations des eingeloggten users
+     * //TODO:geht nicht
+     *
      * @return
      */
-    @RequestMapping(value="/invitation",method = RequestMethod.GET)
-    public @ResponseBody List<Invitation> getInvites() {
+    @RequestMapping(value = "/invitation", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<Invitation> getInvites() {
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User loggedIn = x.getUser();
         return invitationRepository.findByInvitedUser(loggedIn);

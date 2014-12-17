@@ -6,7 +6,7 @@ package com.gospry.api.domain;
 public class PasswordObject {
     private String password;
 
-    public PasswordObject(String pw){
+    public PasswordObject(String pw) {
         this.password = pw;
     }
 

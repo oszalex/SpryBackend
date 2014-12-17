@@ -24,8 +24,7 @@ public class UserDetailsAdapter implements UserDetails {
         return String.valueOf(user.getUserID());
     }
 
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 

@@ -25,18 +25,18 @@ import java.util.List;
  */
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class User {
 
     static StringKeyGenerator generator = KeyGenerators.string();
     @Id
-    @Column(name="ID", unique=true)
+    @Column(name = "ID", unique = true)
     private long userID;
     private Date birth;
     private boolean isBored;
     private boolean isFemale;
     private String name;
-    private String password="";
+    private String password = "";
     private String token;
 
 
@@ -49,13 +49,12 @@ public class User {
     @JoinColumn(name = "invitation_id")
     private List<Invitation> invited_happenings;
 
-    public User(){
+    public User() {
         invited_happenings = new LinkedList<Invitation>();
         created_happenings = new LinkedList<Happening>();
     }
 
-    public List<Invitation> getinvited_happenings()
-    {
+    public List<Invitation> getinvited_happenings() {
         return invited_happenings;
     }
 
@@ -73,16 +72,15 @@ public class User {
         invited_happenings.add(invite);
     }
 
-    public List<Happening> gethappenings()
-    {
+    public List<Happening> gethappenings() {
         //TODO:
         List<Happening> happys = created_happenings;
-        for(Invitation invitation : invited_happenings )
-        {
+        for (Invitation invitation : invited_happenings) {
             happys.add(invitation.getHappening());
         }
         return happys;
     }
+
     @JsonIgnore
     public long getUserID() {
         return userID;
@@ -101,10 +99,10 @@ public class User {
     }
 
     public String getPassword() {
-        if(password.equals("")) {
+        if (password.equals("")) {
             password = generator.generateKey();
             //TODO: nur zum testen
-            password  = "123456";
+            password = "123456";
         }
         return password;
     }
@@ -143,11 +141,10 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object x)
-    {
-        if(x == null) return false;
-        if(!(x instanceof User)) return false;
-        if(!(((User) x).getUserID() == this.getUserID())) return false;
+    public boolean equals(Object x) {
+        if (x == null) return false;
+        if (!(x instanceof User)) return false;
+        if (!(((User) x).getUserID() == this.getUserID())) return false;
         else return true;
     }
 }
