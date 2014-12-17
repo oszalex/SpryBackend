@@ -141,10 +141,13 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object x) {
-        if (x == null) return false;
-        if (!(x instanceof User)) return false;
-        if (!(((User) x).getUserID() == this.getUserID())) return false;
-        else return true;
+    public boolean equals(Object user){
+        if(user == null) return false;
+
+        if(user instanceof User){
+            if (this.getUserID() == ((User) user).getUserID()) return true;
+        }
+
+        return false;
     }
 }

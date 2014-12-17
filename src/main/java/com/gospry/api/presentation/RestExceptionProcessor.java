@@ -18,7 +18,6 @@ public class RestExceptionProcessor {
         return new ErrorInfo(req.getRequestURL().toString(), ex);
     }
 
-
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorInfo exception(HttpServletRequest req, Exception ex) {

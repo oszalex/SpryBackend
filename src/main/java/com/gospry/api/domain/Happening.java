@@ -150,4 +150,15 @@ public class Happening {
         this.location = location;
     }
 
+    @Override
+    public boolean equals(Object h){
+        if(h == null) return false;
+
+        if(h instanceof Happening){
+            if (this.Id == ((Happening) h).Id) return true;
+        }
+
+        return false;
+    }
+
 }

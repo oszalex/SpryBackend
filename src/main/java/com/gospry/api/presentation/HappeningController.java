@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @RestController
@@ -74,34 +76,30 @@ public class HappeningController {
 
     /**
      * Shows all Happenings on Server not for live
-     * TODO: delete sooner or later
-     *
-     * @return JSONobject containing all visible Happenings
      */
     @RequestMapping(value = "/happening", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<Happening> showHappenings() {
-        //TODO: only visible Events
-        return (List) happeningRepository.findAll();
-    }
-
-    /**
-     * Shows all the Happenings the User is allowed to see(Public, created, invited)
-     *
-     * @return JSONobject containing all visible Happenings
-     */
-    @RequestMapping(value = "/myhappenings", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    List<Happening> myHappenings() {
-        //TODO: only visible Events
-        List<Happening> myhappenings;
+    Set<Happening> list() {
         UserDetailsAdapter x = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User loggedin = x.getUser();
-        myhappenings = loggedin.gethappenings();
+        User user = x.getUser();
 
-        return (List) myhappenings;
+        HashSet<Happening> happenings = new HashSet<>();
+
+        // get all created
+        happenings.addAll(happeningRepository.findByCreator(user));
+
+        // get all invited
+        for(Invitation i : invitationRepository.findByInvitedUser(user)){
+            happenings.add(i.getHappening());
+        }
+
+        // get all public
+        //TODO: filter all public and only add 'well selected'
+        happenings.addAll(happeningRepository.findByIsPublic(true));
+
+        //TODO: sort?
+        return happenings;
     }
 
     /**

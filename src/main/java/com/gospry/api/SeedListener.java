@@ -12,6 +12,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class SeedListener implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -29,12 +32,17 @@ public class SeedListener implements ApplicationListener<ContextRefreshedEvent> 
         User chris = new User();
         chris.setPhoneNumber(4369911602033L);
         User alex = new User();
-        alex.setPhoneNumber(4369911602033L);
+        alex.setPhoneNumber(436802118976L);
 
         chris = userRepository.save(chris);
         alex = userRepository.save(alex);
 
         Happening some_public_event = new Happening();
+        some_public_event.setDescription("public orgy");
+        ArrayList<String> somekeys = new ArrayList<>();
+        somekeys.add("party");
+        somekeys.add("sexylexy");
+        some_public_event.setKeywords(somekeys);
         some_public_event.setCreator(alex);
         some_public_event.setDuration(120);
         some_public_event.setIsPublic(true);

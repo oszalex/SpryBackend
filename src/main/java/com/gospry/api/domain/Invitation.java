@@ -92,4 +92,16 @@ public class Invitation {
             happening.getInvitations().add(this);
         }*/
     }
+
+
+    @Override
+    public boolean equals(Object h){
+        if(h == null) return false;
+
+        if(h instanceof Invitation){
+            if (this.invitationId == ((Invitation) h).invitationId) return true;
+        }
+
+        return false;
+    }
 }

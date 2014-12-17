@@ -6,7 +6,6 @@ import org.hibernate.dialect.H2Dialect;
  * Workaround.
  *
  * @see https://hibernate.onjira.com/browse/HHH-7002
- *
  */
 public class HSQLDBDialect extends H2Dialect {
     @Override
