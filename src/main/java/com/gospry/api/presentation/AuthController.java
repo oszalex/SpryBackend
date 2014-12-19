@@ -6,7 +6,10 @@ import com.gospry.api.exception.WrongTokenException;
 import com.gospry.api.service.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.logging.Logger;
 
@@ -31,8 +34,11 @@ public class AuthController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "/register/{phoneNumber}", method = RequestMethod.POST)
-    public String registerUser(@PathVariable(value = "phoneNumber") Long phoneNumber, @RequestParam(value = "authid") String authID) {
-        User user;
+    public String registerUser(@PathVariable(value = "phoneNumber") Long phoneNumber) {
+        User user = null;
+        // String json = "APA91bFuklduxG3h6I9Bk1ek2lSUaBNgnLHK2WJrFrTLyeDf5CsvS8fr7P1A_Z4JGNiL5XmguCqBnIX-0HaQe3Us33ydjKrykA45Ak41gxiOd3RGAQgEO91GlsDptc1y9rlzfbsCjAZlvBq3f1zoQv06cCjemm99ZwqbVmqy9MDuSCaPXLOP4Qs";
+        try {
+            // JSONObject authID = new JSONObject(json) ;
         if (userRepository.exists(phoneNumber)) {
             user = userRepository.findByUserID(phoneNumber);
             //return userRepository.findByUserID(phoneNumber).getToken();
@@ -41,10 +47,14 @@ public class AuthController extends AbstractController {
             user = new User();
         }
         //TODO: per SMS an die Nummer verschicken
-        user.setgoogleID(authID);
-        user = userRepository.save(user);
+            String json = "APA91bFuklduxG3h6I9Bk1ek2lSUaBNgnLHK2WJrFrTLyeDf5CsvS8fr7P1A_Z4JGNiL5XmguCqBnIX-0HaQe3Us33ydjKrykA45Ak41gxiOd3RGAQgEO91GlsDptc1y9rlzfbsCjAZlvBq3f1zoQv06cCjemm99ZwqbVmqy9MDuSCaPXLOP4Qs";
+            //   System.out.println("AuthiD" + authID.getString("authID"));
+            user.setgoogleID(json);
+            user = userRepository.save(user);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
         return user.getToken();
-
     }
 
 

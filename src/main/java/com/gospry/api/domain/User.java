@@ -1,12 +1,14 @@
 package com.gospry.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gospry.api.Ac2dmPushNotificationServiceImpl;
+import com.gospry.api.presentation.Ac2dmPushNotificationServiceImpl;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -38,7 +40,8 @@ public class User {
     private String name;
     private String password = "";
     private String token;
-    private Set<String> googleauthenticationids;
+
+    // private List<String> googleauthenticationids;
     private String googleauthenticationkey = "";
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "happening_id")
@@ -51,7 +54,7 @@ public class User {
     public User() {
         invited_happenings = new LinkedList<Invitation>();
         created_happenings = new LinkedList<Happening>();
-        googleauthenticationids = new HashSet<>();
+        //  googleauthenticationids = new LinkedList<>();
     }
 
     public String getGoogleauthenticationkey() {
@@ -59,10 +62,10 @@ public class User {
     }
 
     public void setgoogleID(String authid) {
-        if (!googleauthenticationids.contains(authid)) {
-            googleauthenticationkey = Ac2dmPushNotificationServiceImpl.createNotificationUser(this);
-            googleauthenticationids.add(authid);
-        }
+        //if (!googleauthenticationids.contains(authid)) {
+        googleauthenticationkey = Ac2dmPushNotificationServiceImpl.createNotificationUser(authid, this);
+        //googleauthenticationids.add(authid);
+        // }
     }
 
     public List<Invitation> getinvited_happenings() {
