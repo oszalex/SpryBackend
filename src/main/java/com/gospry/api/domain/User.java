@@ -1,13 +1,13 @@
 package com.gospry.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gospry.api.Ac2dmPushNotificationServiceImpl;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+
 
 /**
  * Created by chris on 08.11.14.
@@ -38,12 +38,11 @@ public class User {
     private String name;
     private String password = "";
     private String token;
-
-
+    private Set<String> googleauthenticationids;
+    private String googleauthenticationkey = "";
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "happening_id")
     private List<Happening> created_happenings;
-
     @OneToMany(fetch = FetchType.EAGER)
     //@OneToMany
     @JoinColumn(name = "invitation_id")
@@ -52,6 +51,18 @@ public class User {
     public User() {
         invited_happenings = new LinkedList<Invitation>();
         created_happenings = new LinkedList<Happening>();
+        googleauthenticationids = new HashSet<>();
+    }
+
+    public String getGoogleauthenticationkey() {
+        return googleauthenticationkey;
+    }
+
+    public void setgoogleID(String authid) {
+        if (!googleauthenticationids.contains(authid)) {
+            googleauthenticationkey = Ac2dmPushNotificationServiceImpl.createNotificationUser(this);
+            googleauthenticationids.add(authid);
+        }
     }
 
     public List<Invitation> getinvited_happenings() {

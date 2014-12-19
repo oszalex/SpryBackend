@@ -6,13 +6,8 @@ import com.gospry.api.exception.WrongTokenException;
 import com.gospry.api.service.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpServletRequest;
 import java.util.logging.Logger;
 
 /**
@@ -36,16 +31,20 @@ public class AuthController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "/register/{phoneNumber}", method = RequestMethod.POST)
-    public String registerUser(@PathVariable(value = "phoneNumber") Long phoneNumber) {
+    public String registerUser(@PathVariable(value = "phoneNumber") Long phoneNumber, @RequestParam(value = "authid") String authID) {
+        User user;
         if (userRepository.exists(phoneNumber)) {
-            return userRepository.findByUserID(phoneNumber).getToken();
+            user = userRepository.findByUserID(phoneNumber);
+            //return userRepository.findByUserID(phoneNumber).getToken();
+        } else {
+            //create user
+            user = new User();
         }
-        //create user
-        User u = new User();
-        u.setPhoneNumber(phoneNumber);
-        userRepository.save(u);
         //TODO: per SMS an die Nummer verschicken
-        return u.getToken();
+        user.setgoogleID(authID);
+        user = userRepository.save(user);
+        return user.getToken();
+
     }
 
 
