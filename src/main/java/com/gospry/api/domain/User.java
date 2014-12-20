@@ -6,6 +6,7 @@ import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,7 +42,8 @@ public class User {
     private String password = "";
     private String token;
 
-    // private List<String> googleauthenticationids;
+    //  @ElementCollection
+    private ArrayList<String> googleauthenticationids = new ArrayList<String>();
     private String googleauthenticationkey = "";
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "happening_id")
@@ -54,7 +56,7 @@ public class User {
     public User() {
         invited_happenings = new LinkedList<Invitation>();
         created_happenings = new LinkedList<Happening>();
-        //  googleauthenticationids = new LinkedList<>();
+        //   googleauthenticationids = new LinkedList<>();
     }
 
     public String getGoogleauthenticationkey() {
@@ -62,10 +64,10 @@ public class User {
     }
 
     public void setgoogleID(String authid) {
-        //if (!googleauthenticationids.contains(authid)) {
+        if (!googleauthenticationids.contains(authid)) {
         googleauthenticationkey = Ac2dmPushNotificationServiceImpl.createNotificationUser(authid, this);
-        //googleauthenticationids.add(authid);
-        // }
+            googleauthenticationids.add(authid);
+        }
     }
 
     public List<Invitation> getinvited_happenings() {

@@ -45,6 +45,7 @@ public class AuthController extends AbstractController {
         } else {
             //create user
             user = new User();
+            user.setPhoneNumber(phoneNumber);
         }
         //TODO: per SMS an die Nummer verschicken
             String json = "APA91bFuklduxG3h6I9Bk1ek2lSUaBNgnLHK2WJrFrTLyeDf5CsvS8fr7P1A_Z4JGNiL5XmguCqBnIX-0HaQe3Us33ydjKrykA45Ak41gxiOd3RGAQgEO91GlsDptc1y9rlzfbsCjAZlvBq3f1zoQv06cCjemm99ZwqbVmqy9MDuSCaPXLOP4Qs";
