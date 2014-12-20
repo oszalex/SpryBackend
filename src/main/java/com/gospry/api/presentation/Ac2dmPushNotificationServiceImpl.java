@@ -26,6 +26,7 @@ public class Ac2dmPushNotificationServiceImpl {
 
     public static String createNotificationUser(String authid, User user) {
         String authID = "";
+        String resp = "";
         try {
             HttpClient client = HttpClientBuilder.create().build();
             HttpPost httpPost = new HttpPost("http://android.googleapis.com/gcm/notification");
@@ -50,13 +51,13 @@ public class Ac2dmPushNotificationServiceImpl {
             System.out.println(response.toString());
             System.out.println(response.getEntity().toString());
             HttpEntity entity = response.getEntity();
-            String resp = EntityUtils.toString(entity);
+            resp = EntityUtils.toString(entity);
             JSONObject result = new JSONObject(resp);
             //TODO: Errorhandling
             authID = (String) result.get("notification_key");
         } catch (Exception e) {
             //TODO:Errorhandling
-            System.out.println("Error while getting Notification Key: " + e.toString());
+            System.out.println("Error while getting Notification Key: " + e.toString() + " Response " + resp);
         }
         return authID;
     }
@@ -82,6 +83,7 @@ public class Ac2dmPushNotificationServiceImpl {
 
     private static void sendNotification(User user, JSONObject payload) throws HttpException, IOException {
         String authID = "";
+        String resp = "";
         try {
             HttpClient client = HttpClientBuilder.create().build();
             HttpPost httpPost = new HttpPost("https://android.googleapis.com/gcm/send");
@@ -96,17 +98,14 @@ public class Ac2dmPushNotificationServiceImpl {
 
             httpPost.setEntity(myEntity);
             HttpResponse response = client.execute(httpPost);
-            System.out.println(response.toString());
-            System.out.println(response.getEntity().toString());
             HttpEntity entity = response.getEntity();
-            String json = EntityUtils.toString(response.getEntity());
-            System.out.println(response.toString());
-            System.out.println(entity.toString());
+            resp = EntityUtils.toString(response.getEntity());
+            System.out.println("Response: " + resp + "  " + response.toString());
             System.out.println();
             //TODO: Errorhandling
         } catch (Exception e) {
             //TODO: Errorhandling
-            System.out.println("Error Sending Notification" + e.toString());
+            System.out.println("Error sending Notification: " + e.toString() + " Response " + resp);
         }
     }
 }

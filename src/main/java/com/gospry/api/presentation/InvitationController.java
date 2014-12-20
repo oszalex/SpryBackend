@@ -39,6 +39,7 @@ public class InvitationController extends AbstractController {
     Invitation invite(@PathVariable(value = "invitedUser") Long invitedUser,
                       @PathVariable(value = "happeningID") Long happeningID
             , @RequestBody Invitation invitestatus) {
+        System.out.println("Inviting User" + Long.toString(invitedUser) + "to Happening" + Long.toString(happeningID));
         Invitation newInvite = new Invitation();
         newInvite.setStatus(InvitationStatus.INVITED);
 
@@ -74,9 +75,15 @@ public class InvitationController extends AbstractController {
         //     invited.addinvitation(newInvite);
         try {
             invited = userRepository.save(invited);
-            Ac2dmPushNotificationServiceImpl.sendInviteNotification(happy, invited);
+            System.out.println("User invited");
+            // Check if user already registered Todo: if not then what?
+            if (!invited.getGoogleauthenticationkey().equals("")) {
+                System.out.println("Send Google  Notification");
+                Ac2dmPushNotificationServiceImpl.sendInviteNotification(happy, invited);
+            }
+
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("Error inviting: " + e.toString());
         }
         //TODO:buggy wenn inviteduser= inviter ist...
         return newInvite;

@@ -52,10 +52,10 @@ logging:
   file: logs/application_v3
   level:
     ROOT: WARN
-    #org.apache.http: WARN
-    #org.springframework: WARN
-    #org.springframework.jdbc: WARN
-    #org.springframework.security: DEBUG
+    org.apache.http: WARN
+    org.springframework: WARN
+    org.springframework.jdbc: WARN
+    org.springframework.security: DEBUG
     com.gospry.api.presentation: INFO
     com.gospry.api: INFO
 ---

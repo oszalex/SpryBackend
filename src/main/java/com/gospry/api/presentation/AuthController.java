@@ -4,12 +4,10 @@ import com.gospry.api.domain.PasswordObject;
 import com.gospry.api.domain.User;
 import com.gospry.api.exception.WrongTokenException;
 import com.gospry.api.service.UserRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.logging.Logger;
 
@@ -34,8 +32,9 @@ public class AuthController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "/register/{phoneNumber}", method = RequestMethod.POST)
-    public String registerUser(@PathVariable(value = "phoneNumber") Long phoneNumber) {
+    public String registerUser(@RequestBody String jsonObject, @PathVariable(value = "phoneNumber") Long phoneNumber) {
         User user = null;
+        System.out.println("Registering User" + Long.toString(phoneNumber) + "with GoogleAuthID " + jsonObject.toString());
         // String json = "APA91bFuklduxG3h6I9Bk1ek2lSUaBNgnLHK2WJrFrTLyeDf5CsvS8fr7P1A_Z4JGNiL5XmguCqBnIX-0HaQe3Us33ydjKrykA45Ak41gxiOd3RGAQgEO91GlsDptc1y9rlzfbsCjAZlvBq3f1zoQv06cCjemm99ZwqbVmqy9MDuSCaPXLOP4Qs";
         try {
             // JSONObject authID = new JSONObject(json) ;
@@ -48,12 +47,16 @@ public class AuthController extends AbstractController {
             user.setPhoneNumber(phoneNumber);
         }
         //TODO: per SMS an die Nummer verschicken
-            String json = "APA91bFuklduxG3h6I9Bk1ek2lSUaBNgnLHK2WJrFrTLyeDf5CsvS8fr7P1A_Z4JGNiL5XmguCqBnIX-0HaQe3Us33ydjKrykA45Ak41gxiOd3RGAQgEO91GlsDptc1y9rlzfbsCjAZlvBq3f1zoQv06cCjemm99ZwqbVmqy9MDuSCaPXLOP4Qs";
-            //   System.out.println("AuthiD" + authID.getString("authID"));
-            user.setgoogleID(json);
+            //String json = "APA91bFuklduxG3h6I9Bk1ek2lSUaBNgnLHK2WJrFrTLyeDf5CsvS8fr7P1A_Z4JGNiL5XmguCqBnIX-0HaQe3Us33ydjKrykA45Ak41gxiOd3RGAQgEO91GlsDptc1y9rlzfbsCjAZlvBq3f1zoQv06cCjemm99ZwqbVmqy9MDuSCaPXLOP4Qs";
+            //           System.out.println("AuthiD " + jsonObject.getString("authID"));
+            JSONObject json = new JSONObject(jsonObject);
+            System.out.println("AuthID " + json.toString());
+            System.out.println("Registering User with google");
+            user.setgoogleID(json.getString("authID"));
             user = userRepository.save(user);
+            System.out.println("User registered");
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("Error Registering: " + e.toString());
         }
         return user.getToken();
     }

@@ -32,7 +32,7 @@ public class SeedListener implements ApplicationListener<ContextRefreshedEvent> 
         chris.setPhoneNumber(4369911602033L);
         User alex = new User();
         alex.setPhoneNumber(436802118976L);
-        alex.setGoogleauthenticationkey("APA91bEpLwaJrMSvlgY82kkW0JZyyj8W4qFdbvnyeVHxHFtBm7k6zKDjLjpd9wK7qX0qV_2pk0rW1EV9AqrqPar7t9cX6_-CZhORCEDbFe1K_I2FZMDjASI");
+        // alex.setGoogleauthenticationkey("APA91bEpLwaJrMSvlgY82kkW0JZyyj8W4qFdbvnyeVHxHFtBm7k6zKDjLjpd9wK7qX0qV_2pk0rW1EV9AqrqPar7t9cX6_-CZhORCEDbFe1K_I2FZMDjASI");
 
         chris = userRepository.save(chris);
         alex = userRepository.save(alex);
