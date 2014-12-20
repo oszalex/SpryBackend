@@ -19,8 +19,8 @@ import java.io.IOException;
  * Created by Alex on 19.12.2014.
  */
 public class Ac2dmPushNotificationServiceImpl {
-    private final static String authKey = "AIzaSyBLN-1EiniZ9aI-1rm4XcZNaC9-x6qu8_w";
-    private final static String project_id = "64541343883";
+    private final static String authKey = "AIzaSyCdD13P5wYhLzXmXfg_OvRIFci36MgNluM";
+    private final static String project_id = "343359709951";
     private String sendingRoleAccount;
     private String sendingRolePassword;
 
@@ -91,7 +91,9 @@ public class Ac2dmPushNotificationServiceImpl {
 
             JSONObject jason = new JSONObject();
             jason.put("notification_key", user.getGoogleauthenticationkey());
-            jason.append("registration_ids", user.getGoogleauthenticationkey());
+            for (String id : user.getGoogleauthenticationids()) {
+                jason.append("registration_ids", id);
+            }
             jason.put("data", payload);
             StringEntity myEntity = new StringEntity(jason.toString(),
                     ContentType.create("application/json", "UTF-8"));

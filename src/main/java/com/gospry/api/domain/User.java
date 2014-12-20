@@ -41,7 +41,6 @@ public class User {
     private String name;
     private String password = "";
     private String token;
-
     //  @ElementCollection
     private ArrayList<String> googleauthenticationids = new ArrayList<String>();
     private String googleauthenticationkey = "";
@@ -57,6 +56,10 @@ public class User {
         invited_happenings = new LinkedList<Invitation>();
         created_happenings = new LinkedList<Happening>();
         //   googleauthenticationids = new LinkedList<>();
+    }
+
+    public ArrayList<String> getGoogleauthenticationids() {
+        return googleauthenticationids;
     }
 
     public String getGoogleauthenticationkey() {
