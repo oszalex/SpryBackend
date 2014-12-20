@@ -1,5 +1,6 @@
 package com.gospry.api.presentation;
 
+import com.gospry.api.domain.Happening;
 import com.gospry.api.domain.User;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
@@ -13,7 +14,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by Alex on 19.12.2014.
@@ -56,7 +56,7 @@ public class Ac2dmPushNotificationServiceImpl {
             authID = (String) result.get("notification_key");
         } catch (Exception e) {
             //TODO:Errorhandling
-            System.out.println("hier2" + e.toString());
+            System.out.println("Error while getting Notification Key: " + e.toString());
         }
         return authID;
     }
@@ -69,33 +69,44 @@ public class Ac2dmPushNotificationServiceImpl {
    "registration_ids": ["4", "8", "15", "16", "23", "42"]
 }
 */
+    public static void sendInviteNotification(Happening happening, User user) {
+        try {
+            JSONObject jason = new JSONObject();
+            jason.put("eventID", Long.toString(happening.getID()));
+            sendNotification(user, jason);
+        } catch (Exception e) {
+            System.out.println("Error Creating Notification: " + e.toString());
+        }
 
-    private static void sendNotification(User user, List<String> payload) throws HttpException, IOException {
+    }
+
+    private static void sendNotification(User user, JSONObject payload) throws HttpException, IOException {
         String authID = "";
         try {
             HttpClient client = HttpClientBuilder.create().build();
-            HttpPost httpPost = new HttpPost("https://android.googleapis.com/gcm/notification");
+            HttpPost httpPost = new HttpPost("https://android.googleapis.com/gcm/send");
             httpPost.addHeader("Authorization", "key=" + authKey);
-            httpPost.addHeader("project_id", project_id);
-            httpPost.addHeader("Content-Type", "application/json");
 
-            // JSONObject jason = new JSONObject();
-            //  jason.append("operation", "create");
-            //   jason.append("notification_key_name", user.getUserID());
-            //  jason.append("registration_ids", user.getUserID());
-            //  StringEntity postingString = new StringEntity(jason.toString());
-            // httpPost.setEntity(postingString);
+            JSONObject jason = new JSONObject();
+            jason.put("notification_key", user.getGoogleauthenticationkey());
+            jason.append("registration_ids", user.getGoogleauthenticationkey());
+            jason.put("data", payload);
+            StringEntity myEntity = new StringEntity(jason.toString(),
+                    ContentType.create("application/json", "UTF-8"));
+
+            httpPost.setEntity(myEntity);
             HttpResponse response = client.execute(httpPost);
-
             System.out.println(response.toString());
+            System.out.println(response.getEntity().toString());
             HttpEntity entity = response.getEntity();
-            String resp = EntityUtils.toString(entity);
-            // JSONObject result = new JSONObject(resp);
+            String json = EntityUtils.toString(response.getEntity());
+            System.out.println(response.toString());
+            System.out.println(entity.toString());
+            System.out.println();
             //TODO: Errorhandling
-            //authID = (String) result.get("notification_key");
         } catch (Exception e) {
-            //TODO:Errorhandling
-            System.out.println("hier: " + e.toString());
+            //TODO: Errorhandling
+            System.out.println("Error Sending Notification" + e.toString());
         }
     }
 }

@@ -64,17 +64,17 @@ public class InvitationController extends AbstractController {
         newInvite.setHappening(happy);
         //Check for previous invitation
         for (Invitation temp : invited.getinvited_happenings()) {
-            //TODO: implement equals
+            //TODO: implement equals?
             if (temp.getHappening().equals(newInvite.getHappening())) {
                 return temp;
             }
         }
         newInvite.setinvited_User(invited);
-
         newInvite = invitationRepository.save(newInvite);
         //     invited.addinvitation(newInvite);
         try {
             invited = userRepository.save(invited);
+            Ac2dmPushNotificationServiceImpl.sendInviteNotification(happy, invited);
         } catch (Exception e) {
             System.out.println(e.toString());
         }

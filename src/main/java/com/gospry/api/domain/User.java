@@ -63,6 +63,10 @@ public class User {
         return googleauthenticationkey;
     }
 
+    public void setGoogleauthenticationkey(String googleauthenticationkey) {
+        this.googleauthenticationkey = googleauthenticationkey;
+    }
+
     public void setgoogleID(String authid) {
         if (!googleauthenticationids.contains(authid)) {
         googleauthenticationkey = Ac2dmPushNotificationServiceImpl.createNotificationUser(authid, this);
