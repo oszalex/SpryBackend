@@ -23,7 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/register/**", "/activate/**", "/status").permitAll()
+                .antMatchers("/register/**", "/activate/**", "/status", "/**/favicon.ico").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
