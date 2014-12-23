@@ -40,7 +40,12 @@ dependencies {
     compile("org.apache.httpcomponents:httpclient:4.3.6");
     compile("org.hsqldb:hsqldb:2.3.+")
     compile("org.json:json:20090211")
+
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
+
+    //TODO: provided or compiled? please decide!
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     compile("org.springframework.boot:spring-boot-starter-tomcat")
 }

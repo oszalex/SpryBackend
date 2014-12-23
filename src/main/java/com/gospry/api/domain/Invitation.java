@@ -93,6 +93,11 @@ public class Invitation {
         }*/
     }
 
+    @Override
+    public String toString(){
+        return "(" + invitedUser.getUserID() + "|" + status.value() + ")";
+    }
+
 
     @Override
     public boolean equals(Object h) {

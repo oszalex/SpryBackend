@@ -21,6 +21,11 @@ import java.util.List;
  *
  * TODO:    check cardinalities, renew password some time(more than one device etc.)
  * TODO:privacy? actuallity of location?
+ *
+ * TODO:
+ * - rename Methods camelstyle!
+ * - sex can be undefined. use Boolean instead? (null possible and default)
+ * - encrypt passwords
  */
 
 /**
@@ -76,6 +81,7 @@ public class User {
             googleauthenticationids.add(authid);
         }
     }
+
 
     public List<Invitation> getinvited_happenings() {
         return invited_happenings;

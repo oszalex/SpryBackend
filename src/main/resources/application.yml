@@ -27,17 +27,17 @@ spring:
 #  jpa.hibernate:
 
 
-security:
-  basic:
-    enabled: true
-  require_ssl: false
-  enable_csrf: false
-  ignored:
-    - /register/**
-    - /acitivate/**
-    - /status
-  # always / never / if_required / stateless
-  sessions: stateless
+#security:
+#  basic:
+#    enabled: true
+#  require_ssl: false
+#  enable_csrf: false
+#  ignored:
+#    - /register/**
+#    - /acitivate/**
+#    - /status
+#  # always / never / if_required / stateless
+#  sessions: stateless
 
 server:
   tomcat:
