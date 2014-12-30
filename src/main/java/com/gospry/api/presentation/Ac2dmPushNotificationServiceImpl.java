@@ -14,6 +14,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Created by Alex on 19.12.2014.
@@ -37,11 +38,13 @@ public class Ac2dmPushNotificationServiceImpl {
             JSONObject jason = new JSONObject();
             if (user.getGoogleauthenticationkey().equals("")) {
                 jason.put("operation", "create");
+                //TODO: Ist ein "Workarund" - nicht unbedingt bei add nötig, und wird dann auch nicht mehr gebraucht, daher kann sich der ständig ändern
+                jason.put("notification_key_name", (Long.toString(user.getUserID()) + String.format("%.4s", UUID.randomUUID().toString())));
             } else {
                 jason.put("operation", "add");
                 jason.put("notification_key", user.getGoogleauthenticationkey());
             }
-            jason.put("notification_key_name", Long.toString(user.getUserID()));
+
             jason.append("registration_ids", authid);
             String test = jason.toString();
             StringEntity myEntity = new StringEntity(jason.toString(),
@@ -53,23 +56,32 @@ public class Ac2dmPushNotificationServiceImpl {
             HttpEntity entity = response.getEntity();
             resp = EntityUtils.toString(entity);
             JSONObject result = new JSONObject(resp);
+            if (result.has("error")) {
+                //Somethings wrong
+                String error = (String) result.get("error");
+                //    if(error.equals("notification_key already exists")){
+                System.out.println("Error while getting Notification Key: " + error);
+                //   }
+            }
             //TODO: Errorhandling
             authID = (String) result.get("notification_key");
         } catch (Exception e) {
             //TODO:Errorhandling
             System.out.println("Error while getting Notification Key: " + e.toString() + " Response " + resp);
         }
+        System.out.println("Notification Key:" + authID);
         return authID;
     }
 
-    /** request:
-     {
-   "operation": "add",
-   "notification_key_name": "appUser-Chris",
-   "notification_key": "aUniqueKey"
-   "registration_ids": ["4", "8", "15", "16", "23", "42"]
-}
-*/
+    /**
+     * request:
+     * {
+     * "operation": "add",
+     * "notification_key_name": "appUser-Chris",
+     * "notification_key": "aUniqueKey"
+     * "registration_ids": ["4", "8", "15", "16", "23", "42"]
+     * }
+     */
     public static void sendInviteNotification(Happening happening, User user) {
         try {
             JSONObject jason = new JSONObject();

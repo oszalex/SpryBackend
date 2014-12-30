@@ -3,6 +3,7 @@ package com.gospry.api.presentation;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.gospry.api.domain.Happening;
 import com.gospry.api.domain.Invitation;
+import com.gospry.api.domain.User;
 import com.gospry.api.exception.EventNotFoundException;
 import com.gospry.api.service.HappeningRepository;
 import com.gospry.api.service.InvitationRepository;
@@ -107,10 +108,11 @@ public class HappeningController extends AbstractController {
     @ResponseBody
     Happening createEvent(@RequestBody Happening newHappening) {
         try {
-            newHappening.setCreator(getCurrentUser());
+            User currentUser = getCurrentUser();
+            newHappening.setCreator(currentUser);
             newHappening = happeningRepository.save(newHappening);
             getCurrentUser().addcreatedHappening(newHappening);
-            userRepository.save(getCurrentUser());
+            userRepository.save(currentUser);
         } catch (Exception e) {
             System.out.print(e.toString());
         }

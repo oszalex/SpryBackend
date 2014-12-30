@@ -56,11 +56,16 @@ public class User {
     //@OneToMany
     @JoinColumn(name = "invitation_id")
     private List<Invitation> invited_happenings;
+    //TODO: Implement Friends
+    // @ManyToMany(fetch = FetchType.EAGER)
+    // @JoinColumn(name = "id")
+    //private List<User> friends;
+
 
     public User() {
         invited_happenings = new LinkedList<Invitation>();
         created_happenings = new LinkedList<Happening>();
-        //   googleauthenticationids = new LinkedList<>();
+        googleauthenticationids = new ArrayList<String>();
     }
 
     public ArrayList<String> getGoogleauthenticationids() {
@@ -77,7 +82,7 @@ public class User {
 
     public void setgoogleID(String authid) {
         if (!googleauthenticationids.contains(authid)) {
-        googleauthenticationkey = Ac2dmPushNotificationServiceImpl.createNotificationUser(authid, this);
+            googleauthenticationkey = Ac2dmPushNotificationServiceImpl.createNotificationUser(authid, this);
             googleauthenticationids.add(authid);
         }
     }

@@ -8,7 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.servlet.http.HttpServletRequest;
 
 public abstract class AbstractController {
-    @Autowired(required=true)
+    @Autowired(required = true)
     protected HttpServletRequest request;
 
     private User currentUser;
@@ -19,8 +19,10 @@ public abstract class AbstractController {
      * @return current user
      */
     public User getCurrentUser() {
-        if (currentUser != null) return currentUser;
-
+     /*   if (currentUser != null) {
+            return currentUser;
+        }
+        */
         UserDetailsAdapter adapter = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         currentUser = adapter.getUser();
 
