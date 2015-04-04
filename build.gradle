@@ -17,7 +17,7 @@ apply plugin: 'war'
 
 war {
     baseName = 'spry'
-    version =  '4'
+    version =  '5'
     archiveName = 'v' + version + '.war'
 }
 
