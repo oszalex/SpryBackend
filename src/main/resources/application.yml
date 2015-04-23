@@ -17,13 +17,19 @@ info:
     start: ${vcap.application.start:N/A}
 
 spring:
+  datasource:
+    url: jdbc:mysql://mysql.gospry.com/spry
+    username: spry
+    password: YnP4K^dD$8J*F&%=
+    driver-class-name: com.mysql.jdbc.Driver
   main:
     sources: com.gospry.api.Application
   jpa:
     show_sql: false
-    # org.hibernate.dialect.MySQL5InnoDBDialect or org.hibernate.dialect.HSQLDialect
+    generate-ddl: true
+    # org.hibernate.dialect.MySQL5InnoDBDialect or org.hibernate.dialect.HSQLDialect com.gospry.api.helper.HSQLDBDialect
     # FIX to remove error messages
-    database-platform: com.gospry.api.helper.HSQLDBDialect
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 #  jpa.hibernate:
 
 
@@ -33,6 +39,8 @@ server:
     key-store: classpath:api.gospry.jks
     key-store-password: Bubendorf14
     key-password: Bubendorf14
+
+
 
 #security:
 #  basic:

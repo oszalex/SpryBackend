@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+/*
 @Component
 public class SeedListener implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -59,3 +60,4 @@ public class SeedListener implements ApplicationListener<ContextRefreshedEvent> 
         invitationRepository.save(chris_to_alex);
     }
 }
+*/
