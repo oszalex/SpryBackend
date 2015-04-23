@@ -10,6 +10,20 @@ run it:
 > ./gradlew bootRun
 
 
+DOCKER
+-----
+Docker image is hosted in private docker repository (docker hub). Image name: inkrement/spry-backend
+
+Try it local:
+ docker run -p 8443:8443 -t inkrement/spry-backend
+ https://192.168.59.103:8443/status (you get your local ip on MacOSX with "boot2docker ip")
+
+
+TODO
+----
+ - MySQL
+ - auto deployment
+
 
 Docs
 ----

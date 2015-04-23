@@ -5,20 +5,24 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
+        classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
+
+
+group = 'inkrement'
+
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: 'war'
+apply plugin: 'docker'
 
-war {
-    baseName = 'spry'
-    version =  '5'
-    archiveName = 'v' + version + '.war'
+jar {
+    baseName = 'spry-backend'
+    version =  '0.1.0'
 }
 
 repositories {
@@ -27,12 +31,16 @@ repositories {
     maven { url "http://repo.spring.io/libs-release" }
 }
 
-configurations {
-    providedRuntime
-}
-
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-data-rest")
@@ -44,12 +52,35 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
+}
 
-    //TODO: provided or compiled? please decide!
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
-    compile("org.springframework.boot:spring-boot-starter-tomcat")
+
+docker {
+    maintainer = 'Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>'
+    baseImage = 'java:7'
+}
+
+task push(type: Docker, dependsOn: build) {
+
+    // VOLUME /tmp
+    volume "/tmp"
+
+    //ADD spryBackend-0.1.0.jar app.jar
+    //jar.baseName + "-" + jar.version + ".jar"
+    addFile(jar.archivePath, "app.jar")
+
+    //RUN bash -c 'touch /app.jar'
+    runCommand 'bash -c "touch /app.jar"'
+
+    //ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+    entryPoint(["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"])
+
+
+    push = true
+    applicationName = jar.baseName
+
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    gradleVersion = '2.3'
 }

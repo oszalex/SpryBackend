@@ -27,6 +27,13 @@ spring:
 #  jpa.hibernate:
 
 
+server:
+  port: 8443
+  ssl:
+    key-store: classpath:api.gospry.jks
+    key-store-password: Bubendorf14
+    key-password: Bubendorf14
+
 #security:
 #  basic:
 #    enabled: true
@@ -39,23 +46,16 @@ spring:
 #  # always / never / if_required / stateless
 #  sessions: stateless
 
-server:
-  tomcat:
-    # Write access log to target/logs/access_log.YYYY-MM-DD.log
-    # See http://tomcat.apache.org/tomcat-7.0-doc/api/org/apache/catalina/valves/AccessLogValve.html
-    accessLogEnabled: true
-    accessLogPattern: '%h %l %u %t "%r" %s %b %{Host}i %{Location}o'
-    baseDir: ''
-    backgroundProcessorDelay: 1
+
 
 logging:
   file: logs/application_v3
   level:
     ROOT: WARN
     org.apache.http: WARN
-    org.springframework: WARN
-    org.springframework.jdbc: WARN
-    org.springframework.security: DEBUG
+#    org.springframework: WARN
+#    org.springframework.jdbc: WARN
+#    org.springframework.security: INFO
     com.gospry.api.presentation: INFO
     com.gospry.api: INFO
 ---
@@ -64,11 +64,7 @@ spring:
   profiles: default,staging,production
 security:
   require_ssl: true
-server:
-  # when deployed to CloudFoundry, tomcat is behind a CDN proxy
-  tomcat:
-    remote_ip_header: x-forwarded-for
-    protocol_header: x-forwarded-proto
+
 
 ---
 
