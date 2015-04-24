@@ -1,6 +1,5 @@
 package com.gospry.api.presentation;
 
-import com.gospry.api.domain.ActivationToken;
 import com.gospry.api.domain.PasswordObject;
 import com.gospry.api.domain.User;
 import com.gospry.api.exception.WrongTokenException;
@@ -30,7 +29,7 @@ public class AuthController extends AbstractController {
      * curl http://localhost:8080/register/4369911602033
      * <p/>
      * TODO: test if user exists
-     *
+     * <p/>
      * ATTENTION: this request must have a non-empty body! if there is no requestbody
      * this route will not be used.
      *
@@ -46,15 +45,15 @@ public class AuthController extends AbstractController {
         // String json = "APA91bFuklduxG3h6I9Bk1ek2lSUaBNgnLHK2WJrFrTLyeDf5CsvS8fr7P1A_Z4JGNiL5XmguCqBnIX-0HaQe3Us33ydjKrykA45Ak41gxiOd3RGAQgEO91GlsDptc1y9rlzfbsCjAZlvBq3f1zoQv06cCjemm99ZwqbVmqy9MDuSCaPXLOP4Qs";
         try {
             // JSONObject authID = new JSONObject(json) ;
-        if (userRepository.exists(phoneNumber)) {
-            user = userRepository.findByUserID(phoneNumber);
-            //return userRepository.findByUserID(phoneNumber).getToken();
-        } else {
-            //create user
-            user = new User();
-            user.setPhoneNumber(phoneNumber);
-        }
-        //TODO: per SMS an die Nummer verschicken
+            if (userRepository.exists(phoneNumber)) {
+                user = userRepository.findByUserID(phoneNumber);
+                //return userRepository.findByUserID(phoneNumber).getToken();
+            } else {
+                //create user
+                user = new User();
+                user.setPhoneNumber(phoneNumber);
+            }
+            //TODO: per SMS an die Nummer verschicken
             //String json = "APA91bFuklduxG3h6I9Bk1ek2lSUaBNgnLHK2WJrFrTLyeDf5CsvS8fr7P1A_Z4JGNiL5XmguCqBnIX-0HaQe3Us33ydjKrykA45Ak41gxiOd3RGAQgEO91GlsDptc1y9rlzfbsCjAZlvBq3f1zoQv06cCjemm99ZwqbVmqy9MDuSCaPXLOP4Qs";
             //           System.out.println("AuthiD " + jsonObject.getString("authID"));
             JSONObject json = new JSONObject(jsonObject);
@@ -93,8 +92,9 @@ public class AuthController extends AbstractController {
 
     /**
      * logout
-     *
+     * <p/>
      * destroys session
+     *
      * @return empty string
      */
 

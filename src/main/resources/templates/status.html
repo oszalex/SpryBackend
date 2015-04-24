@@ -5,13 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
     <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" ></meta>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"> </link>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    </link>
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"> </link>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    </link>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -35,80 +37,80 @@
 
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-        </div><!--/.navbar-collapse -->
+        </div>
+        <!--/.navbar-collapse -->
     </div>
 </nav>
 
 <div class="jumbotron">
     <div class="container">
         <h1>SpryCockpit</h1>
+
         <p>Congrats, it`s running and ready to rock!</p>
     </div>
 </div>
 
-    <div class="container">
+<div class="container">
 
-        <h2>Happenings</h2>
-        <table class="table">
-            <tr>
-                <th>ID</th>
-                <th>description</th>
-                <th>creator</th>
-                <th>duration</th>
-                <th>keywords</th>
-                <th>start time</th>
-                <th>created</th>
-                <th>public</th>
-                <th>invitations</th>
-            </tr>
-            <tr th:each="h : ${happenings}">
-                <td th:text="${h.getID()}"></td>
-                <td th:text="${h.getDescription()}"></td>
-                <td th:text="${h.getcreatorID()}"></td>
-                <td th:text="${h.getDuration()}"></td>
-                <td th:text="${h.getKeywords().toString()}"></td>
-                <td th:text="${#calendars.format(h.getStart_time())}"></td>
-                <td th:text="${#calendars.format(h.getCreatedAt())}"></td>
-                <td th:text="${h.getIsPublic()}"></td>
-                <td th:text="${h.getInvitations().toString()}"></td>
-            </tr>
-        </table>
-
-
-
-        <h2>Users</h2>
-        <table class="table">
-            <tr>
-                <th>ID</th>
-                <th>name</th>
-                <th>bored?</th>
-                <th>password</th>
-                <th>token</th>
-                <th>googleAuth Key</th>
-                <th>googleAuth IDs</th>
-                <th>sex</th>
-            </tr>
-            <tr th:each="u : ${users}">
-                <td th:text="${u.getUserID()}"></td>
-                <td th:text="${u.getName()}"></td>
-                <td th:text="${u.getIsBored()}"></td>
-                <td th:text="${u.getPassword()}"></td>
-                <td th:text="${u.getToken()}"></td>
-                <td th:text="${u.getGoogleauthenticationkey()}"></td>
-                <td th:text="${u.getGoogleauthenticationids().toString()}"></td>
-                <td th:text="${u.getIsFemale()}"></td>
-            </tr>
-        </table>
+    <h2>Happenings</h2>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>description</th>
+            <th>creator</th>
+            <th>duration</th>
+            <th>keywords</th>
+            <th>start time</th>
+            <th>created</th>
+            <th>public</th>
+            <th>invitations</th>
+        </tr>
+        <tr th:each="h : ${happenings}">
+            <td th:text="${h.getID()}"></td>
+            <td th:text="${h.getDescription()}"></td>
+            <td th:text="${h.getcreatorID()}"></td>
+            <td th:text="${h.getDuration()}"></td>
+            <td th:text="${h.getKeywords().toString()}"></td>
+            <td th:text="${#calendars.format(h.getStart_time())}"></td>
+            <td th:text="${#calendars.format(h.getCreatedAt())}"></td>
+            <td th:text="${h.getIsPublic()}"></td>
+            <td th:text="${h.getInvitations().toString()}"></td>
+        </tr>
+    </table>
 
 
-        <hr></hr>
+    <h2>Users</h2>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>name</th>
+            <th>bored?</th>
+            <th>password</th>
+            <th>token</th>
+            <th>googleAuth Key</th>
+            <th>googleAuth IDs</th>
+            <th>sex</th>
+        </tr>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.getUserID()}"></td>
+            <td th:text="${u.getName()}"></td>
+            <td th:text="${u.getIsBored()}"></td>
+            <td th:text="${u.getPassword()}"></td>
+            <td th:text="${u.getToken()}"></td>
+            <td th:text="${u.getGoogleauthenticationkey()}"></td>
+            <td th:text="${u.getGoogleauthenticationids().toString()}"></td>
+            <td th:text="${u.getIsFemale()}"></td>
+        </tr>
+    </table>
 
-        <footer>
-            <p>&copy; Spry 2014</p>
-        </footer>
 
-    </div>
+    <hr></hr>
 
+    <footer>
+        <p>&copy; Spry 2014</p>
+    </footer>
+
+</div>
 
 
 </body>

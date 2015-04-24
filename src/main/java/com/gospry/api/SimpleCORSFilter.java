@@ -2,7 +2,7 @@ package com.gospry.api;
 
 /**
  * Filter to support cross origin requests (CORS)
- *
+ * <p/>
  * http://www.html5rocks.com/en/tutorials/cors/
  * https://spring.io/guides/gs/rest-service-cors/
  * https://spring.io/understanding/CORS
@@ -46,11 +46,10 @@ public class SimpleCORSFilter extends OncePerRequestFilter {
             } catch (IOException e) {
                 //todo log
             }
-        }else{
+        } else {
             chain.doFilter(req, res);
         }
     }
-
 
 
 }

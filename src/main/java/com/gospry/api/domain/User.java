@@ -14,14 +14,14 @@ import java.util.List;
 
 /**
  * Created by chris on 08.11.14.
- *
+ * <p/>
  * user registriert oder nur iwo eingeladen?!
  * token wo wird der gespechert
  * lazy/eager loading
- *
+ * <p/>
  * TODO:    check cardinalities, renew password some time(more than one device etc.)
  * TODO:privacy? actuallity of location?
- *
+ * <p/>
  * TODO:
  * - rename Methods camelstyle!
  * - sex can be undefined. use Boolean instead? (null possible and default)

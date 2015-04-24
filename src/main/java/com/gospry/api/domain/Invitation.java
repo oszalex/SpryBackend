@@ -94,7 +94,7 @@ public class Invitation {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "(" + invitedUser.getUserID() + "|" + status.value() + ")";
     }
 
