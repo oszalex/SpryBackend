@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("/status")
 public class StatusController {
     @Autowired
     HappeningRepository happeningRepository;
     @Autowired
     UserRepository userRepository;
 
-    @RequestMapping(value = "/status", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView statusInformation() {
         ModelAndView model = new ModelAndView("status");
 

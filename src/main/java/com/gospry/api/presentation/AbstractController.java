@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 public abstract class AbstractController {
     @Autowired(required = true)
     protected HttpServletRequest request;

@@ -24,6 +24,14 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   main:
     sources: com.gospry.api.Application
+  thymeleaf:
+    check-template-location: false
+    view-names: status
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    content-type: text/html # ;charset=<encoding> is added
+    cache: true
   jpa:
     show_sql: false
     generate-ddl: true
@@ -39,7 +47,6 @@ server:
     key-store: classpath:api.gospry.jks
     key-store-password: Bubendorf14
     key-password: Bubendorf14
-
 
 
 #security:

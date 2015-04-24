@@ -1,5 +1,6 @@
 package com.gospry.api.presentation;
 
+import com.gospry.api.domain.ActivationToken;
 import com.gospry.api.domain.PasswordObject;
 import com.gospry.api.domain.User;
 import com.gospry.api.exception.WrongTokenException;
@@ -24,16 +25,23 @@ public class AuthController extends AbstractController {
     @Autowired
     private UserRepository userRepository;
 
+
     /**
      * curl http://localhost:8080/register/4369911602033
      * <p/>
      * TODO: test if user exists
      *
+     * ATTENTION: this request must have a non-empty body! if there is no requestbody
+     * this route will not be used.
+     *
      * @return
      */
+
+
     @RequestMapping(value = "/register/{phoneNumber}", method = RequestMethod.POST)
     public String registerUser(@RequestBody String jsonObject, @PathVariable(value = "phoneNumber") Long phoneNumber) {
         User user = null;
+
         System.out.println("Registering User" + Long.toString(phoneNumber) + "with GoogleAuthID " + jsonObject.toString());
         // String json = "APA91bFuklduxG3h6I9Bk1ek2lSUaBNgnLHK2WJrFrTLyeDf5CsvS8fr7P1A_Z4JGNiL5XmguCqBnIX-0HaQe3Us33ydjKrykA45Ak41gxiOd3RGAQgEO91GlsDptc1y9rlzfbsCjAZlvBq3f1zoQv06cCjemm99ZwqbVmqy9MDuSCaPXLOP4Qs";
         try {
@@ -89,6 +97,7 @@ public class AuthController extends AbstractController {
      * destroys session
      * @return empty string
      */
+
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout() {
         request.getSession().invalidate();
