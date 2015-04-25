@@ -1,3 +1,8 @@
+# Auto endpoints
+we are using spring actuator, which provides some auto-generated endpoints: http://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html
+
+
+# Custom endpoints
 
 register
 
