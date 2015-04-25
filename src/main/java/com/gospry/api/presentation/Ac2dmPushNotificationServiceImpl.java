@@ -1,5 +1,6 @@
 package com.gospry.api.presentation;
 
+/*
 import com.gospry.api.domain.Happening;
 import com.gospry.api.domain.User;
 import org.apache.http.HttpEntity;
@@ -15,11 +16,13 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.UUID;
-
+*/
 /**
  * Created by Alex on 19.12.2014.
  */
 public class Ac2dmPushNotificationServiceImpl {
+
+    /*
     private final static String authKey = "AIzaSyCdD13P5wYhLzXmXfg_OvRIFci36MgNluM";
     private final static String project_id = "343359709951";
     private String sendingRoleAccount;
@@ -82,6 +85,7 @@ public class Ac2dmPushNotificationServiceImpl {
      * "registration_ids": ["4", "8", "15", "16", "23", "42"]
      * }
      */
+    /*
     public static void sendInviteNotification(Happening happening, User user) {
         try {
             JSONObject jason = new JSONObject();
@@ -121,5 +125,5 @@ public class Ac2dmPushNotificationServiceImpl {
             //TODO: Errorhandling
             System.out.println("Error sending Notification: " + e.toString() + " Response " + resp);
         }
-    }
+    }*/
 }

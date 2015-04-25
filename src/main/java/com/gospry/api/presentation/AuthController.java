@@ -1,14 +1,17 @@
 package com.gospry.api.presentation;
 
+import com.gospry.api.domain.InvalidRequest;
 import com.gospry.api.domain.PasswordObject;
 import com.gospry.api.domain.User;
+import com.gospry.api.domain.UserRegistration;
+import com.gospry.api.exception.InvalidRequestException;
 import com.gospry.api.exception.WrongTokenException;
 import com.gospry.api.service.UserRepository;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.logging.Logger;
 
 /**
@@ -38,33 +41,29 @@ public class AuthController extends AbstractController {
 
 
     @RequestMapping(value = "/register/{phoneNumber}", method = RequestMethod.POST)
-    public String registerUser(@RequestBody String jsonObject, @PathVariable(value = "phoneNumber") Long phoneNumber) {
+    public String registerUser(
+            @RequestBody UserRegistration data,
+            @PathVariable(value = "phoneNumber") Long phoneNumber) throws InvalidRequestException{
+
+        // 1: update or create user
         User user = null;
 
-        System.out.println("Registering User" + Long.toString(phoneNumber) + "with GoogleAuthID " + jsonObject.toString());
-        // String json = "APA91bFuklduxG3h6I9Bk1ek2lSUaBNgnLHK2WJrFrTLyeDf5CsvS8fr7P1A_Z4JGNiL5XmguCqBnIX-0HaQe3Us33ydjKrykA45Ak41gxiOd3RGAQgEO91GlsDptc1y9rlzfbsCjAZlvBq3f1zoQv06cCjemm99ZwqbVmqy9MDuSCaPXLOP4Qs";
-        try {
-            // JSONObject authID = new JSONObject(json) ;
-            if (userRepository.exists(phoneNumber)) {
-                user = userRepository.findByUserID(phoneNumber);
-                //return userRepository.findByUserID(phoneNumber).getToken();
-            } else {
-                //create user
-                user = new User();
-                user.setPhoneNumber(phoneNumber);
-            }
-            //TODO: per SMS an die Nummer verschicken
-            //String json = "APA91bFuklduxG3h6I9Bk1ek2lSUaBNgnLHK2WJrFrTLyeDf5CsvS8fr7P1A_Z4JGNiL5XmguCqBnIX-0HaQe3Us33ydjKrykA45Ak41gxiOd3RGAQgEO91GlsDptc1y9rlzfbsCjAZlvBq3f1zoQv06cCjemm99ZwqbVmqy9MDuSCaPXLOP4Qs";
-            //           System.out.println("AuthiD " + jsonObject.getString("authID"));
-            JSONObject json = new JSONObject(jsonObject);
-            System.out.println("AuthID " + json.toString());
-            System.out.println("Registering User with google");
-            user.setgoogleID(json.getString("authID"));
-            user = userRepository.save(user);
-            System.out.println("User registered");
-        } catch (Exception e) {
-            System.out.println("Error Registering: " + e.toString());
+        if (userRepository.exists(phoneNumber)) {
+            //find user
+            user = userRepository.findByUserID(phoneNumber);
+        } else {
+            //create user
+            user = new User();
+            user.setPhoneNumber(phoneNumber);
         }
+
+        // 2: @todo random token
+        user.setToken("1234");
+        if(data.getAuthID() != null) user.setgoogleID(data.getAuthID());
+        user = userRepository.save(user);
+
+        // 3: @todo send token per sms
+
         return user.getToken();
     }
 
@@ -103,5 +102,11 @@ public class AuthController extends AbstractController {
         request.getSession().invalidate();
 
         return new String();
+    }
+
+
+    @ExceptionHandler(value = {Exception.class, RuntimeException.class})
+    public InvalidRequest defaultErrorHandler(HttpServletRequest request, Exception e) {
+        return new InvalidRequest("not able to process request", request.getRequestURL().toString(), e.getClass());
     }
 }

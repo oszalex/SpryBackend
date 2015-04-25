@@ -1,7 +1,7 @@
 project:
   artifactId: spry
   name: spry
-  version: X.X.X.X
+  version: 0.5
   description: spry
 
 info:
@@ -17,6 +17,7 @@ info:
     start: ${vcap.application.start:N/A}
 
 spring:
+  profiles: default,staging,production
   datasource:
     url: jdbc:mysql://mysql.gospry.com/spry
     username: spry
@@ -38,6 +39,9 @@ spring:
     # org.hibernate.dialect.MySQL5InnoDBDialect or org.hibernate.dialect.HSQLDialect com.gospry.api.helper.HSQLDBDialect
     # FIX to remove error messages
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    connection:
+      autoReconnect: true
+      autoReconnectForPools: true
 #  jpa.hibernate:
 
 
@@ -49,7 +53,8 @@ server:
     key-password: Bubendorf14
 
 
-#security:
+security:
+  require_ssl: true
 #  basic:
 #    enabled: true
 #  require_ssl: false
@@ -61,7 +66,9 @@ server:
 #  # always / never / if_required / stateless
 #  sessions: stateless
 
-
+#
+# ERROR, WARN, INFO, DEBUG or TRACE
+#
 
 logging:
   file: logs/application_v3
@@ -71,28 +78,8 @@ logging:
 #    org.springframework: WARN
 #    org.springframework.jdbc: WARN
 #    org.springframework.security: INFO
-    com.gospry.api.presentation: INFO
-    com.gospry.api: INFO
----
+#    com.gospry.api.presentation: INFO
+    com.gospry.api: TRACE
 
-spring:
-  profiles: default,staging,production
-security:
-  require_ssl: true
-
-
----
-
-spring:
-  profiles: default
 cache:
   timetolive: 0
----
-
-spring:
-  profiles: staging
-
----
-
-spring:
-  profiles: production

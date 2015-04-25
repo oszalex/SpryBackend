@@ -79,7 +79,8 @@ public class InvitationController extends AbstractController {
             // Check if user already registered Todo: if not then what?
             if (!invited.getGoogleauthenticationkey().equals("")) {
                 System.out.println("Send Google  Notification");
-                Ac2dmPushNotificationServiceImpl.sendInviteNotification(happy, invited);
+                //TODO
+                //Ac2dmPushNotificationServiceImpl.sendInviteNotification(happy, invited);
             }
 
         } catch (Exception e) {

@@ -82,8 +82,9 @@ public class User {
 
     public void setgoogleID(String authid) {
         if (!googleauthenticationids.contains(authid)) {
-            googleauthenticationkey = Ac2dmPushNotificationServiceImpl.createNotificationUser(authid, this);
-            googleauthenticationids.add(authid);
+            //TODO: recode
+            //googleauthenticationkey = Ac2dmPushNotificationServiceImpl.createNotificationUser(authid, this);
+            //googleauthenticationids.add(authid);
         }
     }
 
@@ -166,7 +167,6 @@ public class User {
     }
 
     public String getToken() {
-        token = "1234";
         return token;
     }
 
