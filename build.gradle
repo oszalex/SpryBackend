@@ -52,7 +52,7 @@ dependencies {
     compile("org.apache.httpcomponents:httpclient:4.3.6");
     //compile("org.hsqldb:hsqldb:2.3.+")
     compile("mysql:mysql-connector-java:5.1.35")
-    //compile("org.json:json:20090211")
+    compile("org.json:json:20090211")
 
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 

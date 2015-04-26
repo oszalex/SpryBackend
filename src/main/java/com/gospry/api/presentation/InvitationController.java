@@ -5,9 +5,11 @@ import com.gospry.api.domain.Invitation;
 import com.gospry.api.domain.InvitationStatus;
 import com.gospry.api.domain.User;
 import com.gospry.api.exception.EventNotFoundException;
+import com.gospry.api.exception.GoogleNotificationServiceException;
 import com.gospry.api.exception.InvitationNotFoundException;
 import com.gospry.api.exception.NotAllowedException;
 import com.gospry.api.service.HappeningRepository;
+import com.gospry.api.service.notifications.IGoogleNotificationService;
 import com.gospry.api.service.InvitationRepository;
 import com.gospry.api.service.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class InvitationController extends AbstractController {
     private HappeningRepository happeningRepository;
     @Autowired
     private InvitationRepository invitationRepository;
+
+    @Autowired
+    private IGoogleNotificationService googleNotificationService;
 
     /**
      * Eine Person zu einem Event einladen
@@ -77,14 +82,15 @@ public class InvitationController extends AbstractController {
             invited = userRepository.save(invited);
             System.out.println("User invited");
             // Check if user already registered Todo: if not then what?
-            if (!invited.getGoogleauthenticationkey().equals("")) {
-                System.out.println("Send Google  Notification");
-                //TODO
-                //Ac2dmPushNotificationServiceImpl.sendInviteNotification(happy, invited);
+            if (!invited.getGoogleauthenticationkey().isEmpty()) {
+                log.info("send google notifications");
+                googleNotificationService.createInviteNotifications(invited, happeningID);
             }
 
         } catch (Exception e) {
             System.out.println("Error inviting: " + e.toString());
+        } catch (GoogleNotificationServiceException e) {
+            log.warning("not able to send google invitations");
         }
         //TODO:buggy wenn inviteduser= inviter ist...
         return newInvite;

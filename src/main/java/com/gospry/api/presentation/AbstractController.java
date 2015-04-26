@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.logging.Logger;
 
 
 public abstract class AbstractController {
+    static final Logger log = Logger.getLogger(AbstractController.class.getName());
+
     @Autowired(required = true)
     protected HttpServletRequest request;
 

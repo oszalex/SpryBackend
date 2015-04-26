@@ -1,7 +1,9 @@
 package com.gospry.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gospry.api.presentation.Ac2dmPushNotificationServiceImpl;
+import com.gospry.api.exception.GoogleNotificationServiceException;
+import com.gospry.api.service.notifications.IGoogleNotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 
@@ -56,6 +58,12 @@ public class User {
     //@OneToMany
     @JoinColumn(name = "invitation_id")
     private List<Invitation> invited_happenings;
+
+    //please do not use this in this layer... move logic to service layer
+    @Transient
+    @Autowired
+    private IGoogleNotificationService googleNotificationService;
+
     //TODO: Implement Friends
     // @ManyToMany(fetch = FetchType.EAGER)
     // @JoinColumn(name = "id")
@@ -82,9 +90,15 @@ public class User {
 
     public void setgoogleID(String authid) {
         if (!googleauthenticationids.contains(authid)) {
-            //TODO: recode
-            //googleauthenticationkey = Ac2dmPushNotificationServiceImpl.createNotificationUser(authid, this);
-            //googleauthenticationids.add(authid);
+            //TODO: refactor! do not call service in domain!
+            try {
+                googleauthenticationkey = googleNotificationService.subscribe(authid, this);
+            } catch (GoogleNotificationServiceException e) {
+                // TODO:
+                // do nothing. error reporting should be done in service layer
+                // therefore move this logic to service layer
+            }
+            googleauthenticationids.add(authid);
         }
     }
 
