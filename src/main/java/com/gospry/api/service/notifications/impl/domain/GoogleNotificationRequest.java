@@ -11,12 +11,12 @@ import java.util.List;
 public class GoogleNotificationRequest implements IGoogleRequest {
     private String notificationKey;
     private List<String> registrationIds;
-    private long eventId;
+    private long happeningId;
 
-    public GoogleNotificationRequest(String notificationKey, List<String> registrationIds, long eventId) {
+    public GoogleNotificationRequest(String notificationKey, List<String> registrationIds, long happeningId) {
         this.notificationKey = notificationKey;
         this.registrationIds = registrationIds;
-        this.eventId = eventId;
+        this.happeningId = happeningId;
     }
 
 
@@ -35,7 +35,7 @@ public class GoogleNotificationRequest implements IGoogleRequest {
 
         // event id
         sb.append("data: {");
-        sb.append("eventID:" + eventId);
+        sb.append("eventID:" + happeningId);
         sb.append("}");
 
         // end json
