@@ -46,12 +46,14 @@ public class AuthController extends AbstractController {
             @PathVariable(value = "phoneNumber") Long phoneNumber) throws InvalidRequestException{
 
         // 1: update or create user
-        User user = null;
+        User user;
 
         if (userRepository.exists(phoneNumber)) {
+            log.info("there is already a user with this phoneNumber");
             //find user
             user = userRepository.findByUserID(phoneNumber);
         } else {
+            log.info("create new user with id: " + phoneNumber);
             //create user
             user = new User();
             user.setPhoneNumber(phoneNumber);

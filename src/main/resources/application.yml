@@ -19,10 +19,13 @@ info:
 spring:
   profiles: default,staging,production
   datasource:
+    #https://github.com/spring-projects/spring-boot/commit/50190a4de7dec55df462fb06c2d888176403d654
     url: jdbc:mysql://mysql.gospry.com/spry
     username: spry
     password: YnP4K^dD$8J*F&%=
+    # http://stackoverflow.com/questions/15198319/why-do-we-use-a-datasource-instead-of-a-drivermanager
     driver-class-name: com.mysql.jdbc.Driver
+    #dataSourceClassName: com.zaxxer.hikari.HikariDataSource
   main:
     sources: com.gospry.api.Application
   thymeleaf:
@@ -39,9 +42,9 @@ spring:
     # org.hibernate.dialect.MySQL5InnoDBDialect or org.hibernate.dialect.HSQLDialect com.gospry.api.helper.HSQLDBDialect
     # FIX to remove error messages
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    connection:
-      autoReconnect: true
-      autoReconnectForPools: true
+#    connection:
+#      autoReconnect: true #veraltet
+#      autoReconnectForPools: true
 #  jpa.hibernate:
 
 

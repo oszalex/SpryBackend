@@ -40,6 +40,8 @@ dependencies {
         exclude module: "spring-boot-starter-tomcat"
     }
 
+
+
     //use jetty instead of tomcat because tomcat is not able to load
     // jks file from jar
     compile("org.springframework.boot:spring-boot-starter-jetty")
@@ -48,7 +50,13 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-data-rest")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa") {
+        exclude module: "tomcat-jdbc"
+    }
+    //use different connection pool to resolve performance issues
+    //java 6/7 specific build
+    compile("com.zaxxer:HikariCP-java6")
+
     compile("org.apache.httpcomponents:httpclient:4.3.6");
     //compile("org.hsqldb:hsqldb:2.3.+")
     compile("mysql:mysql-connector-java:5.1.35")
@@ -68,7 +76,8 @@ docker {
 task push(type: Docker, dependsOn: build) {
 
     // VOLUME /tmp
-    volume "/tmp"
+    // only important for tomcat
+    //volume "/tmp"
 
     //ADD spryBackend-0.1.0.jar app.jar
     //jar.baseName + "-" + jar.version + ".jar"
