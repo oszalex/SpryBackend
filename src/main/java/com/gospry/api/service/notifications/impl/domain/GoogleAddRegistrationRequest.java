@@ -1,6 +1,7 @@
 package com.gospry.api.service.notifications.impl.domain;
 
 import org.thymeleaf.util.StringUtils;
+
 import java.util.Collections;
 
 /**
@@ -23,13 +24,13 @@ public class GoogleAddRegistrationRequest extends GoogleRegistrationRequest {
         sb.append("{");
 
         // add operation
-        sb.append("operation:" + operation.toString() + ",");
+        sb.append("\"operation\":" + operation.toString() + ",");
 
         // add notification key
-        sb.append("notification_key:" + notificationKey + ",");
+        sb.append("\"notification_key\":" + notificationKey + ",");
 
         // add registration identifier
-        sb.append("registration_ids:[" + StringUtils.join(registrationIds, ",") + "]");
+        sb.append("\"registration_ids\":[" + StringUtils.join(registrationIds, ",") + "]");
 
         // end json
         sb.append("}");

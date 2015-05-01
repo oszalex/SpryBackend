@@ -14,13 +14,14 @@ public enum InvitationStatus {
 
     @JsonCreator
     public static InvitationStatus forValue(String v) {
-        if (v.equals("invited"))
+        System.out.println("Setting Value for Invitationstatus "+v);
+        if (v.equals("INVITED"))
             return InvitationStatus.INVITED;
-        if (v.equals("not_attending"))
+        if (v.equals("NOT_ATTENDING"))
             return InvitationStatus.NOT_ATTENDING;
-        if (v.equals("attending"))
+        if (v.equals("ATTENDING"))
             return InvitationStatus.ATTENDING;
-        if (v.equals("maybe"))
+        if (v.equals("MAYBE"))
             return InvitationStatus.MAYBE;
 
         return InvitationStatus.NOT_INVITED;

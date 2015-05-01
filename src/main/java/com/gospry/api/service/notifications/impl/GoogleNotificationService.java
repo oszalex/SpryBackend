@@ -42,7 +42,7 @@ public class GoogleNotificationService implements IGoogleNotificationService {
     @Value("${google.notifications.authKey}")
     private String authKey;
     @Value("${google.notifications.project_id}")
-    private String project_id = "343359709951";
+    private String project_id = "64541343883";
 
     /**
      *
@@ -106,18 +106,17 @@ public class GoogleNotificationService implements IGoogleNotificationService {
         // set header
         httpPost.addHeader("Authorization", "key=" + authKey);
         if(withProjectId) httpPost.addHeader("project_id", project_id);
-
+        httpPost.addHeader("Content-Type", "application/json");
         // set body
         httpPost.setEntity(new StringEntity(request.toJson(),
                 ContentType.create("application/json", "UTF-8")));
-
+        log.info("Google Request Data: " + request.toJson());
         // execute request
-        log.fine("send google notification request " + httpPost.toString());
-
+        log.info("send google notification request " + httpPost.toString());
         HttpResponse response = client.execute(httpPost);
         String res = EntityUtils.toString(response.getEntity());
 
-        log.fine("received google notification response: " + res);
+        log.info("received google notification response: " + res);
 
         return res;
     }

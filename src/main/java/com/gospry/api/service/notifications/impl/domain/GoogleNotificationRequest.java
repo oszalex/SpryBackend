@@ -28,14 +28,14 @@ public class GoogleNotificationRequest implements IGoogleRequest {
         sb.append("{");
 
         // notification key
-        sb.append("notification_key:" + notificationKey + ",");
+        sb.append("\"notification_key\":\"" + notificationKey + "\",");
 
         // notification Ids
-        sb.append("registration_ids:[" + StringUtils.join(registrationIds, ",") + "],");
+        sb.append("\"registration_ids\":[\"" + StringUtils.join(registrationIds, "\",\"") + "\"],");
 
         // event id
-        sb.append("data: {");
-        sb.append("eventID:" + happeningId);
+        sb.append("\"data\": {");
+        sb.append("\"eventID\":\"" + happeningId + "\"");
         sb.append("}");
 
         // end json

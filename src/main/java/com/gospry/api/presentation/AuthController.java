@@ -4,13 +4,16 @@ import com.gospry.api.domain.InvalidRequest;
 import com.gospry.api.domain.PasswordObject;
 import com.gospry.api.domain.User;
 import com.gospry.api.domain.UserRegistration;
+import com.gospry.api.exception.GoogleNotificationServiceException;
 import com.gospry.api.exception.InvalidRequestException;
 import com.gospry.api.exception.WrongTokenException;
 import com.gospry.api.service.UserRepository;
+import com.gospry.api.service.notifications.IGoogleNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Transient;
 import javax.servlet.http.HttpServletRequest;
 import java.util.logging.Logger;
 
@@ -26,7 +29,10 @@ public class AuthController extends AbstractController {
 
     @Autowired
     private UserRepository userRepository;
-
+    //please do not use this in this layer... move logic to service layer
+    @Transient
+    @Autowired
+    private IGoogleNotificationService googleNotificationService;
 
     /**
      * curl http://localhost:8080/register/4369911602033
@@ -43,7 +49,7 @@ public class AuthController extends AbstractController {
     @RequestMapping(value = "/register/{phoneNumber}", method = RequestMethod.POST)
     public String registerUser(
             @RequestBody UserRegistration data,
-            @PathVariable(value = "phoneNumber") Long phoneNumber) throws InvalidRequestException{
+            @PathVariable(value = "phoneNumber") Long phoneNumber) throws InvalidRequestException,GoogleNotificationServiceException{
 
         // 1: update or create user
         User user;
@@ -61,7 +67,8 @@ public class AuthController extends AbstractController {
 
         // 2: @todo random token
         user.setToken("1234");
-        if(data.getAuthID() != null) user.setgoogleID(data.getAuthID());
+        if(data.getAuthID() != null)
+            user.setgoogleID(data.getAuthID(),googleNotificationService);
         user = userRepository.save(user);
 
         // 3: @todo send token per sms

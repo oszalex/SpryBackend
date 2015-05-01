@@ -1,6 +1,9 @@
 package com.gospry.api.service.notifications.impl.domain;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.thymeleaf.util.StringUtils;
+
 import java.util.Collections;
 import java.util.UUID;
 
@@ -19,6 +22,16 @@ public class GoogleCreateRegistrationRequest extends GoogleRegistrationRequest {
 
     @Override
     public String toJson() {
+        JSONObject jason = new JSONObject();
+        try {
+            jason.append("registration_ids", StringUtils.join(registrationIds, ","));
+            jason.put("operation", "create");
+            jason.put("notification_key_name", notificationKeyName);
+        } catch (JSONException e) {
+            //TODO: Error
+        }
+
+        /*
         StringBuilder sb = new StringBuilder();
 
         // start json
@@ -31,11 +44,11 @@ public class GoogleCreateRegistrationRequest extends GoogleRegistrationRequest {
         sb.append("notification_key_name:" + notificationKeyName + ",");
 
         // add registration identifier
-        sb.append("registration_ids:[" + StringUtils.join(registrationIds, ",") + "]");
+        sb.append("registration_ids:" + StringUtils.join(registrationIds, ",") + "");
 
         // end json
         sb.append("}");
-
-        return sb.toString();
+*/
+        return jason.toString();
     }
 }
