@@ -18,6 +18,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -52,6 +53,7 @@ public class GoogleNotificationService implements IGoogleNotificationService {
      * @throws GoogleNotificationServiceException
      */
     @Override
+    @Async
     public String subscribe(String authid, User user) throws GoogleNotificationServiceException {
         GoogleRegistrationRequest registrationRequest;
         log.fine("create new google notification subscription for user: " + user.getUserID());
@@ -130,6 +132,7 @@ public class GoogleNotificationService implements IGoogleNotificationService {
      * @throws GoogleNotificationServiceException
      */
     @Override
+    @Async
     public void createInviteNotifications(User user, long happeningId) throws GoogleNotificationServiceException {
         GoogleNotificationRequest request = new GoogleNotificationRequest(
                 user.getGoogleauthenticationkey(),

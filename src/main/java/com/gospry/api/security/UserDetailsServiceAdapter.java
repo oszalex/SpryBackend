@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  * Adapts the {@link UserRepository} to the {@link UserDetailsService} interface
  * so Spring Security can use it as an authentication source.
  */
-@Service
+@Service("userDetailsService")
 @Transactional(readOnly = true)
 public class UserDetailsServiceAdapter implements UserDetailsService {
     static Logger log = Logger.getLogger(UserDetailsServiceAdapter.class.getName());

@@ -1,19 +1,17 @@
 package com.gospry.api;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@ComponentScan
-@EnableAutoConfiguration
-@EnableGlobalMethodSecurity
+
+@SpringBootApplication
+@EnableAsync
 public class Application extends SpringBootServletInitializer {
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(Application.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
     // Used when deploying to a standalone servlet container

@@ -44,6 +44,7 @@ dependencies {
 
     //use jetty instead of tomcat because tomcat is not able to load
     // jks file from jar
+    //compile("org.springframework.boot:spring-boot-autoconfigure")
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
 
