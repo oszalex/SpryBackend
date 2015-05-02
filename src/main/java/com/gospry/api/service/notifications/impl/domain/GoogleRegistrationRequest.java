@@ -1,7 +1,6 @@
 package com.gospry.api.service.notifications.impl.domain;
 
 import com.gospry.api.service.notifications.IGoogleRequest;
-import com.gospry.api.service.notifications.impl.domain.GoogleRegistrationOperation;
 
 import java.util.List;
 

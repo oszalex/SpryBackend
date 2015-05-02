@@ -11,9 +11,7 @@ buildscript {
     }
 }
 
-
 group = 'inkrement'
-
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -23,7 +21,7 @@ apply plugin: 'docker'
 
 jar {
     baseName = 'spry-backend'
-    version =  '0.1.0'
+    version =  '0.1.2'
 }
 
 repositories {
@@ -32,38 +30,33 @@ repositories {
     maven { url "http://repo.spring.io/libs-release" }
 }
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
 
-
-
     //use jetty instead of tomcat because tomcat is not able to load
     // jks file from jar
-    //compile("org.springframework.boot:spring-boot-autoconfigure")
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
-
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-data-rest")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-data-jpa") {
         exclude module: "tomcat-jdbc"
     }
-    //use different connection pool to resolve performance issues
-    //java 6/7 specific build
-    compile("com.zaxxer:HikariCP-java6")
-
-    compile("org.apache.httpcomponents:httpclient:4.3.6");
-    //compile("org.hsqldb:hsqldb:2.3.+")
-    compile("mysql:mysql-connector-java:5.1.35")
-    compile("org.json:json:20090211")
-
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    // use different connection pool to resolve performance issues
+    compile("com.zaxxer:HikariCP")
+    // used for Google/Android notifications
+    compile("org.apache.httpcomponents:httpclient");
+    // producation db connection
+    compile("mysql:mysql-connector-java")
+    // used for Google Android notifications
+    compile("org.json:json:20141113")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
@@ -71,13 +64,14 @@ dependencies {
 
 docker {
     maintainer = 'Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>'
-    baseImage = 'java:7'
+    baseImage = 'java:8'
 }
 
-task push(type: Docker, dependsOn: build) {
+task pushDocker(type: Docker, dependsOn: build) {
 
     // VOLUME /tmp
-    // only important for tomcat
+    // only important for tomcat but
+    // not able to use tomcat in combination with ssl-cert
     //volume "/tmp"
 
     //ADD spryBackend-0.1.0.jar app.jar
@@ -87,14 +81,15 @@ task push(type: Docker, dependsOn: build) {
     //RUN bash -c 'touch /app.jar'
     runCommand 'bash -c "touch /app.jar"'
 
-    //ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+    //ENTRYPOINT
     entryPoint(["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"])
 
-
-    push = true
     applicationName = jar.baseName
 
+    // auto-push to docker hub (will be deployed to server)
+    push = true
 }
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'

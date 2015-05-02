@@ -56,6 +56,12 @@ server:
     key-password: Bubendorf14
 
 
+##
+## Security
+##
+## for advanced settings take a look at WebSecurityConfig.java
+##
+
 security:
   require_ssl: true
   basic:
@@ -65,12 +71,13 @@ security:
     - /register/**
     - /acitivate/**
     - /status
-#  # always / never / if_required / stateless
-#  sessions: stateless
+  sessions: NEVER # always / never / if_required / stateless
 
-#
-# ERROR, WARN, INFO, DEBUG or TRACE
-#
+##
+## Logging
+##
+## log levels: ERROR, WARN, INFO, DEBUG or TRACE
+##
 
 logging:
   file: logs/application_v3
@@ -86,6 +93,10 @@ logging:
 
 cache:
   timetolive: 0
+
+##
+## Google Android notifications
+##
 
 google:
   notifications:

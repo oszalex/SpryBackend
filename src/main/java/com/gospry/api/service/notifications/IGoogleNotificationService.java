@@ -3,8 +3,6 @@ package com.gospry.api.service.notifications;
 import com.gospry.api.domain.User;
 import com.gospry.api.exception.GoogleNotificationServiceException;
 
-import java.io.IOException;
-
 /**
  * Created by chris on 25/04/15.
  */

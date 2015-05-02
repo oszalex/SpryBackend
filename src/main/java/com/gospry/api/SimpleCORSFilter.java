@@ -44,7 +44,7 @@ public class SimpleCORSFilter extends OncePerRequestFilter {
                 res.getWriter().print("OK");
                 res.getWriter().flush();
             } catch (IOException e) {
-                //todo log
+                logger.warn("there was a IO Exception not able to return OK on Options Request: " + e.getMessage());
             }
         } else {
             chain.doFilter(req, res);
