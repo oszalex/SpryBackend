@@ -3,7 +3,6 @@ package com.gospry.api.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gospry.api.exception.GoogleNotificationServiceException;
 import com.gospry.api.service.notifications.IGoogleNotificationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 
@@ -59,10 +58,7 @@ public class User {
     @JoinColumn(name = "invitation_id")
     private List<Invitation> invited_happenings;
 
-    //please do not use this in this layer... move logic to service layer
-    @Transient
-    @Autowired
-    private IGoogleNotificationService googleNotificationService;
+
 
     //TODO: Implement Friends
     // @ManyToMany(fetch = FetchType.EAGER)
@@ -88,7 +84,8 @@ public class User {
         this.googleauthenticationkey = googleauthenticationkey;
     }
 
-    public void setgoogleID(String authid) {
+    //TODO: HotFIx notificationservice
+    public void setgoogleID(String authid, IGoogleNotificationService googleNotificationService) throws GoogleNotificationServiceException {
         if (!googleauthenticationids.contains(authid)) {
             //TODO: refactor! do not call service in domain!
             try {

@@ -1,20 +1,18 @@
 package com.gospry.api.presentation;
 
-import com.gospry.api.domain.Happening;
-import com.gospry.api.domain.Invitation;
-import com.gospry.api.domain.InvitationStatus;
-import com.gospry.api.domain.User;
+import com.gospry.api.domain.*;
 import com.gospry.api.exception.EventNotFoundException;
 import com.gospry.api.exception.GoogleNotificationServiceException;
 import com.gospry.api.exception.InvitationNotFoundException;
 import com.gospry.api.exception.NotAllowedException;
 import com.gospry.api.service.HappeningRepository;
-import com.gospry.api.service.notifications.IGoogleNotificationService;
 import com.gospry.api.service.InvitationRepository;
 import com.gospry.api.service.UserRepository;
+import com.gospry.api.service.notifications.IGoogleNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -106,22 +104,30 @@ public class InvitationController extends AbstractController {
     @RequestMapping(value = "/invitation/{happeningID}", method = RequestMethod.PUT)
     public
     @ResponseBody
-    Invitation updateInvite(@PathVariable(value = "happeningID") Long happeningID, @RequestBody InvitationStatus status) {
+    Invitation updateInvite(@PathVariable(value = "happeningID") Long happeningID, @RequestBody Invitation status) {
+        //System.out.println("User" + Long.toString(getCurrentUser().getUserID()) + "responding to Happening" + Long.toString(happeningID) +"Status " +status2);
         Happening e = happeningRepository.findOne(happeningID);
-
+        //InvitationStatus status = InvitationStatus.ATTENDING;
         if (e == null) {
             throw new EventNotFoundException(happeningID.toString());
         }
-
-        Invitation toUpdate = invitationRepository.findByInvitedUserAndHappening(getCurrentUser(), e);
-
-        if (toUpdate == null) {
-            throw new InvitationNotFoundException("userID: " + getCurrentUser().getName() + " happening: " + e.getID());
+        Invitation toUpdate;
+        if (e.getCreator().getUserID() == getCurrentUser().getUserID()) {
+            toUpdate = null;
+        } else {
+            if (e.getIsPublic()) {
+                toUpdate = new Invitation(getCurrentUser(), e.getCreator(), status.getStatus(), e);
+            } else {
+                toUpdate = invitationRepository.findByInvitedUserAndHappening(getCurrentUser(), e);
+                if (toUpdate == null) {
+                    throw new InvitationNotFoundException("userID: " + getCurrentUser().getName() + " happening: " + e.getID());
+                }
+                toUpdate.setStatus(status.getStatus());
+            }
+            toUpdate = invitationRepository.save(toUpdate);
         }
 
-        toUpdate.setStatus(status);
-
-        return invitationRepository.save(toUpdate);
+        return toUpdate;
     }
 
     /**
@@ -135,5 +141,10 @@ public class InvitationController extends AbstractController {
     @ResponseBody
     List<Invitation> getInvites() {
         return invitationRepository.findByInvitedUser(getCurrentUser());
+    }
+
+    @ExceptionHandler(value = {Exception.class, RuntimeException.class})
+    public InvalidRequest defaultErrorHandler(HttpServletRequest request, Exception e) {
+        return new InvalidRequest("not able to process request", request.getRequestURL().toString(), e.getClass());
     }
 }

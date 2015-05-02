@@ -80,8 +80,8 @@ logging:
 #    org.springframework: WARN
 #    org.springframework.jdbc: WARN
 #    org.springframework.security: INFO
-#    com.gospry.api.presentation: INFO
-    com.gospry.api: DEBUG
+    com.gospry.api.presentation: INFO
+    com.gospry.api: TRACE
     package com.gospry.api.service.notifications: TRACE
 
 cache:
@@ -91,6 +91,6 @@ google:
   notifications:
    urls:
      notify: https://android.googleapis.com/gcm/send
-     register: http://android.googleapis.com/gcm/notification
-   authKey: AIzaSyCdD13P5wYhLzXmXfg_OvRIFci36MgNluM
-   project_id: 343359709951
+     register: https://android.googleapis.com/gcm/notification
+   authKey: AIzaSyCKjENBbal2pafFsddMiTLZmqnrhjuXb28
+   project_id: 64541343883
