@@ -102,7 +102,7 @@ public class Invitation {
 
     @Override
     public String toString() {
-        return "(" + invitedUser.getUserID() + "|" + status.value() + ")";
+        return "(" + invitedUser.getUserID() + "|" + status.value() + "|" + isModerator() + ")";
     }
 
 
