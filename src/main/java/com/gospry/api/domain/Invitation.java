@@ -23,13 +23,10 @@ public class Invitation {
     @ManyToOne
     @JoinColumn(name = "inviter", referencedColumnName = "id")
     private User inviter;
-
     @JsonIgnore
     private boolean isModerator = false;
     private InvitationStatus status;
-
     private Calendar createdAt;
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "happening_id", referencedColumnName = "id")
@@ -43,6 +40,10 @@ public class Invitation {
         this.setInviter(inviter);
         this.setStatus(status);
         this.setHappening(happy);
+    }
+
+    public void setIsModerator(boolean isModerator) {
+        this.isModerator = isModerator;
     }
 
     public boolean isModerator() {

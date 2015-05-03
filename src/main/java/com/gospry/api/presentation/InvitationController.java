@@ -129,6 +129,10 @@ public class InvitationController extends AbstractController {
                     throw new InvitationNotFoundException("userID: " + getCurrentUser().getName() + " happening: " + e.getID());
                 }
                 toUpdate.setStatus(status.getStatus());
+                //TODO: Nicht schoen, vl Moderatoren doch besser in happening abspeichern
+                if (status.isModerator() == true && getCurrentUser() == e.getCreator()) {
+                    toUpdate.setIsModerator(true);
+                }
             }
             toUpdate = invitationRepository.save(toUpdate);
         }
