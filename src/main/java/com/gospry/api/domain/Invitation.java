@@ -24,6 +24,8 @@ public class Invitation {
     @JoinColumn(name = "inviter", referencedColumnName = "id")
     private User inviter;
 
+    @JsonIgnore
+    private boolean isModerator = false;
     private InvitationStatus status;
 
     private Calendar createdAt;
@@ -41,6 +43,10 @@ public class Invitation {
         this.setInviter(inviter);
         this.setStatus(status);
         this.setHappening(happy);
+    }
+
+    public boolean isModerator() {
+        return isModerator;
     }
 
     public long getInvitationId() {

@@ -24,7 +24,7 @@ public class Happening {
      * wenn ein happening gelöscht wird, sollen auch alle invitations gelöscht werden dh cascade all
      */
     @JsonIgnore
-    @OneToMany(targetEntity = Invitation.class, mappedBy = "happening", fetch = FetchType.EAGER, cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(targetEntity = Invitation.class, mappedBy = "happening", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<Invitation> invitations;
     // Dauer
     private int duration = 120;
@@ -160,5 +160,14 @@ public class Happening {
 
         return false;
     }
+    /* Deprecated
+    public boolean isModerator(User user){
+        for(Invitation temp: getInvitations()) {
+            if (temp.getInvitedUser() == user.getUserID() && temp.isModerator() == true) {
+                return true;
+            }
+        }
+        return false;
+    }*/
 
 }

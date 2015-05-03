@@ -43,12 +43,19 @@ public class InvitationController extends AbstractController {
                       @PathVariable(value = "happeningID") Long happeningID
             , @RequestBody Invitation invitestatus) {
         System.out.println("Inviting User" + Long.toString(invitedUser) + "to Happening" + Long.toString(happeningID));
-        Invitation newInvite = new Invitation();
-        newInvite.setStatus(InvitationStatus.INVITED);
-
-        newInvite.setInviter(getCurrentUser());
         User invited;
-        long a = invitationRepository.count();
+        Happening happy;
+        if (!happeningRepository.exists(happeningID)) {
+            throw new EventNotFoundException("Happening does not exist " + happeningID);
+        }
+
+        happy = happeningRepository.findOne(happeningID);
+        //Check if User is allowed to invite
+        if (happy.getCreator().getUserID() != getCurrentUser().getUserID()) {
+            Invitation temp = invitationRepository.findByInvitedUserAndHappening(getCurrentUser(), happy);
+            if (temp == null || temp.isModerator() == false)
+                throw new NotAllowedException("User not Creator or Moderator" + getCurrentUser().getUserID() + "of Happening " + happeningID);
+        }
         if (!userRepository.exists(invitedUser)) {
             invited = new User();
             invited.setPhoneNumber(invitedUser);
@@ -56,39 +63,38 @@ public class InvitationController extends AbstractController {
         } else {
             invited = userRepository.findByUserID(invitedUser);
         }
-        if (!happeningRepository.exists(happeningID)) {
-
-            throw new EventNotFoundException("Happening does not exist");
-        }
-        Happening happy = happeningRepository.findOne(happeningID);
-        if (happy.getCreator().getUserID() != getCurrentUser().getUserID()) {
-            throw new NotAllowedException("Wrong User?");
-            //TODO:Check ob User ADMIN ist, dann wärs OK
-        }
-        newInvite.setHappening(happy);
         //Check for previous invitation
-        for (Invitation temp : invited.getinvited_happenings()) {
-            //TODO: implement equals?
+        if (invitationRepository.findByInvitedUserAndHappening(invited, happy) != null) {
+            return invitationRepository.findByInvitedUserAndHappening(invited, happy);
+        }
+        //TODO: Delete?! Check for previous invitation deprecated oder so siehe oben
+ /*       for (Invitation temp : invited.getinvited_happenings()) {
+            TODO: implement equals?
             if (temp.getHappening().equals(newInvite.getHappening())) {
                 return temp;
             }
         }
+        */
+
+        Invitation newInvite = new Invitation();
+        newInvite.setStatus(InvitationStatus.INVITED);
+        newInvite.setInviter(getCurrentUser());
+        newInvite.setHappening(happy);
         newInvite.setinvited_User(invited);
         newInvite = invitationRepository.save(newInvite);
-        //     invited.addinvitation(newInvite);
         try {
-            invited = userRepository.save(invited);
-            System.out.println("User invited");
+            // invited = userRepository.save(invited);
+            System.out.println("User invited" + invited.getUserID());
             // Check if user already registered Todo: if not then what?
             if (!invited.getGoogleauthenticationkey().isEmpty()) {
-                log.info("send google notifications");
+                log.info("Send google notification to User" + invited.getUserID() + "for Happening" + happeningID);
                 googleNotificationService.createInviteNotifications(invited, happeningID);
             }
 
         } catch (Exception e) {
             System.out.println("Error inviting: " + e.toString());
         } catch (GoogleNotificationServiceException e) {
-            log.warning("not able to send google invitations");
+            log.warning("Not able to send google invitations to user" + invited);
         }
         //TODO:buggy wenn inviteduser= inviter ist...
         return newInvite;
@@ -140,6 +146,7 @@ public class InvitationController extends AbstractController {
     public
     @ResponseBody
     List<Invitation> getInvites() {
+
         return invitationRepository.findByInvitedUser(getCurrentUser());
     }
 
