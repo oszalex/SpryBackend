@@ -55,24 +55,6 @@ server:
     key-store-password: Bubendorf14
     key-password: Bubendorf14
 
-
-##
-## Security
-##
-## for advanced settings take a look at WebSecurityConfig.java
-##
-
-security:
-  require_ssl: true
-  basic:
-    enabled: true
-  enable_csrf: false
-  ignored:
-    - /register/**
-    - /acitivate/**
-    - /status
-  sessions: NEVER # always / never / if_required / stateless
-
 ##
 ## Logging
 ##
