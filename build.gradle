@@ -7,6 +7,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
         classpath('se.transmode.gradle:gradle-docker:1.2')
+        //classpath 'com.bmuschko:gradle-docker-plugin:2.3.1'
         classpath 'org.ajoberstar:gradle-git:1.1.0'
     }
 }
@@ -18,8 +19,10 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'docker'
+//apply plugin: 'com.bmuschko.docker-remote-api'
 
 jar {
+    //Attention: you have to sync Dockerfile by hand!
     baseName = 'spry-backend'
     version =  '0.1.2'
 }
@@ -67,6 +70,24 @@ docker {
     baseImage = 'java:8'
 }
 
+/**
+ * new docker build
+
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+
+task buildDocker(type: DockerBuildImage, dependsOn: build) {
+
+    2375
+    url =
+    inputDir = file('src/main/resources')
+    tag = 'test/myapp'
+//    portBindings = ['8443:8443']
+}*/
+
+/**
+ * old docker build
+ */
 task pushDocker(type: Docker, dependsOn: build) {
 
     // VOLUME /tmp
@@ -90,6 +111,9 @@ task pushDocker(type: Docker, dependsOn: build) {
     push = true
 }
 
+/**
+ * gradle wrapper
+ */
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
