@@ -58,4 +58,5 @@ public class Location {
     public void setPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
+
 }

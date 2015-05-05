@@ -1,10 +1,9 @@
 package com.gospry.api.presentation;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.gospry.api.domain.Happening;
-import com.gospry.api.domain.Invitation;
-import com.gospry.api.domain.User;
+import com.gospry.api.domain.*;
 import com.gospry.api.exception.EventNotFoundException;
+import com.gospry.api.exception.NotAllowedException;
 import com.gospry.api.service.HappeningRepository;
 import com.gospry.api.service.InvitationRepository;
 import com.gospry.api.service.UserRepository;
@@ -36,15 +35,25 @@ public class HappeningController extends AbstractController {
     @RequestMapping(value = "/happening/{happeningID}", method = RequestMethod.GET)
     public
     @ResponseBody
-    Happening showHappening(@PathVariable(value = "happeningID") Long happeningID) {
-
-        if (!happeningRepository.exists(happeningID)) {
-            log.warning("Event does not exist");
+    HappeningDTO showHappening(@PathVariable(value = "happeningID") Long happeningID) {
+        InvitationStatus status;
+        Happening happening = happeningRepository.findOne(happeningID);
+        if (happening == null) {
+            log.warning("Event does not exist" + happeningID);
             throw new EventNotFoundException(happeningID.toString() + " Event does not exist");
         }
-
-        //TODO: Überprüfung ob User Event sehen darf
-        return happeningRepository.findOne(happeningID);
+        if (!happening.getIsPublic()) {
+            Invitation invitation = invitationRepository.findByInvitedUserAndHappening(getCurrentUser(), happeningRepository.findOne(happeningID));
+            if (invitation == null) {
+                log.warning("User " + getCurrentUser().getUserID() + "not allowed to see Happening" + happeningID);
+                throw new NotAllowedException("User " + getCurrentUser().getUserID() + "not allowed to see Happening" + happeningID);
+            }
+            status = invitation.getStatus();
+        } else {
+            status = InvitationStatus.INVITED;
+        }
+        return new HappeningDTO(status, happening);
+        //   return happeningRepository.findOne(happeningID);
     }
 
     /**
@@ -78,9 +87,9 @@ public class HappeningController extends AbstractController {
     @RequestMapping(value = "/happening", method = RequestMethod.GET)
     public
     @ResponseBody
-    Set<Happening> list() {
+    Set<HappeningDTO> list() {
         HashSet<Happening> happenings = new HashSet<>();
-
+        //Warum Hashset?
         // get all created
         happenings.addAll(happeningRepository.findByCreator(getCurrentUser()));
 
@@ -92,9 +101,17 @@ public class HappeningController extends AbstractController {
         // get all public
         //TODO: filter all public and only add 'well selected'
         happenings.addAll(happeningRepository.findByIsPublic(true));
-
-        //TODO: sort?
-        return happenings;
+        //TODO: schöner machen
+        HashSet<HappeningDTO> happeningsDTO = new HashSet<>();
+        for (Happening happy : happenings) {
+            InvitationStatus status;
+            Invitation i = invitationRepository.findByInvitedUserAndHappening(getCurrentUser(), happy);
+            if (i == null) status = InvitationStatus.INVITED;
+            else status = i.getStatus();
+            happeningsDTO.add(new HappeningDTO(status, happy));
+        }
+        //TODO: sort? hier sortieren bringt nix
+        return happeningsDTO;
     }
 
     /**
