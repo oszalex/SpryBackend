@@ -41,11 +41,11 @@ public class Happening {
     private String description = new String("");
 
     // TODO: location - this is a workaround
-    /* @ManyToOne
+    @ManyToOne
     @JoinColumn(name="location_id", referencedColumnName="ID")
     private Location location;
-    */
-    private String location;
+
+    //  private String location;
     //happening creator
     @JsonIgnore
     @ManyToOne  //(targetEntity=User.class, fetch=FetchType.EAGER)
@@ -142,14 +142,15 @@ public class Happening {
         this.description = description;
     }
 
-    public String getLocation() {
-        return location;
-    }
+    /*
+        public String getLocation() {
+            return location;
+        }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
+        public void setLocation(String location) {
+            this.location = location;
+        }
+    */
     @Override
     public boolean equals(Object h) {
         if (h == null) return false;

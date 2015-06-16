@@ -1,8 +1,8 @@
 package com.gospry.api.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 public class Location {
@@ -15,9 +15,16 @@ public class Location {
     private double latitude;
     private String name;
     private String description;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "happening_id")
 
+    private List<Happening> happenings;
     // is this location a public one?
     private boolean isPublic;
+
+    public Location() {
+        happenings = new LinkedList<Happening>();
+    }
 
     public double getLongitude() {
         return longitude;
@@ -59,4 +66,8 @@ public class Location {
         this.isPublic = isPublic;
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
