@@ -7,10 +7,7 @@ import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -59,17 +56,30 @@ public class User {
     private List<Invitation> invited_happenings;
 
 
-
+    private double latitude;
+    private double longitude;
+    private Date lastLocationUpdate;
     //TODO: Implement Friends
     // @ManyToMany(fetch = FetchType.EAGER)
     // @JoinColumn(name = "id")
     //private List<User> friends;
 
-
     public User() {
         invited_happenings = new LinkedList<Invitation>();
         created_happenings = new LinkedList<Happening>();
         googleauthenticationids = new ArrayList<String>();
+    }
+
+    public void updateLocation(double longitude, double latitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        //TODO: DateTime Datatype OK?
+        Date now = Calendar.getInstance().getTime();
+        lastLocationUpdate = now;
+    }
+
+    public String getLocation() {
+        return Double.toString(latitude) + ", " + Double.toString(longitude);
     }
 
     public ArrayList<String> getGoogleauthenticationids() {
