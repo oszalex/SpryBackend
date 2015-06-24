@@ -57,6 +57,7 @@
         <tr>
             <th>ID</th>
             <th>description</th>
+            <th>location</th>
             <th>creator</th>
             <th>duration</th>
             <th>keywords</th>
@@ -68,6 +69,7 @@
         <tr th:each="h : ${happenings}">
             <td th:text="${h.getID()}"></td>
             <td th:text="${h.getDescription()}"></td>
+            <td th:text="${h.getLocation()}"></td>
             <td th:text="${h.getcreatorID()}"></td>
             <td th:text="${h.getDuration()}"></td>
             <td th:text="${h.getKeywords().toString()}"></td>

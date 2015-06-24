@@ -20,6 +20,7 @@ public class Happening {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, unique = true)
     private long Id;
+
     /**
      * wenn ein happening gelöscht wird, sollen auch alle invitations gelöscht werden dh cascade all
      */
@@ -41,8 +42,9 @@ public class Happening {
     private String description = new String("");
 
     // TODO: location - this is a workaround
-    @ManyToOne
-    @JoinColumn(name="location_id", referencedColumnName="ID")
+    @JsonIgnore
+    @ManyToOne //(targetEntity=Location.class, fetch=FetchType.EAGER)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
 
     //  private String location;
@@ -142,15 +144,18 @@ public class Happening {
         this.description = description;
     }
 
-    /*
-        public String getLocation() {
+    public Location getLocation() {
             return location;
         }
 
-        public void setLocation(String location) {
+    public void setLocation(Location location) {
             this.location = location;
         }
-    */
+
+    public long getlocatID() {
+        return 1234L;
+    }
+
     @Override
     public boolean equals(Object h) {
         if (h == null) return false;

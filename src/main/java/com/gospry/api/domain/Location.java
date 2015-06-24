@@ -1,29 +1,29 @@
 package com.gospry.api.domain;
 
 import javax.persistence.*;
-import java.util.LinkedList;
-import java.util.List;
 
 @Entity
 public class Location {
 
-    @javax.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long Id;
+    @Column(name = "ID", unique = true)
+    private long locid;
 
     private double longitude;
     private double latitude;
     private String name;
     private String description;
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "happening_id")
 
-    private List<Happening> happenings;
+    // @JsonIgnore
+    // @OneToMany(fetch = FetchType.EAGER, mappedBy = "happening")
+    //@JoinColumn(name = "happening_id")
+    // private List<Happening> happenings;
     // is this location a public one?
-    private boolean isPublic;
+    private boolean publiclocation;
 
     public Location() {
-        happenings = new LinkedList<Happening>();
+        //happenings = new LinkedList<Happening>();
     }
 
     public double getLongitude() {
@@ -58,16 +58,20 @@ public class Location {
         this.description = description;
     }
 
-    public boolean isPublic() {
-        return isPublic;
+    public boolean getPubliclocation() {
+        return publiclocation;
     }
 
-    public void setPublic(boolean isPublic) {
-        this.isPublic = isPublic;
+    public void setPubliclocation(boolean is_Public) {
+        this.publiclocation = is_Public;
     }
 
     @Override
     public String toString() {
         return getName();
     }
+
+/*    public long getlocid() {
+        return locid;
+    }*/
 }

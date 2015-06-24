@@ -65,9 +65,9 @@ logging:
   file: logs/application_v3
   level:
     ROOT: WARN
-    org.apache.http: WARN
+    org.apache.http: INFO
 #    org.springframework: WARN
-#    org.springframework.jdbc: WARN
+#    org.springframework.jdbc: INFO
 #    org.springframework.security: INFO
     com.gospry.api.presentation: INFO
     com.gospry.api: TRACE

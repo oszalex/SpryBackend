@@ -25,7 +25,7 @@ public class SimpleCORSFilter extends OncePerRequestFilter {
         String origin = req.getHeader("Origin");
 
         //comma separated list of all allowed domains excl. this host
-        res.setHeader("Access-Control-Allow-Origin", origin);
+        if (origin != null) res.setHeader("Access-Control-Allow-Origin", origin);
 
         //comma separated list of all allowed cross domain request methods
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
@@ -38,7 +38,16 @@ public class SimpleCORSFilter extends OncePerRequestFilter {
 
         //uncomment following line if you need cookie support
         //response.setHeader("Access-Control-Allow-Credentials", "true");
-
+        // Read from request
+        /*
+        StringBuilder buffer = new StringBuilder();
+        BufferedReader reader = req.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            buffer.append(line);
+        }
+        String data = buffer.toString();
+*/
         if (req.getMethod().equals("OPTIONS")) {
             try {
                 res.getWriter().print("OK");
